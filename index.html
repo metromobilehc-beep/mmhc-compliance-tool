@@ -310,6 +310,7 @@
     display: flex; justify-content: space-between; align-items: center;
     margin-top: 28px; padding-top: 20px;
     border-top: 1px solid var(--gray-100);
+    flex-wrap: wrap; gap: 10px;
   }
   .slide-counter { font-size: 13px; color: var(--gray-400); }
   .nav-btn {
@@ -320,6 +321,34 @@
   .nav-btn.prev:hover { background: var(--gray-200); }
   .nav-btn.next { background: var(--teal); color: #fff; }
   .nav-btn.next:hover { background: #237f8f; }
+
+  /* ── LISTEN BUTTON ── */
+  .listen-bar {
+    display: flex; align-items: center; gap: 10px;
+    background: #f0fafc; border: 1.5px solid var(--teal);
+    border-radius: 10px; padding: 10px 16px;
+    margin-bottom: 20px;
+  }
+  .listen-btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--teal); color: #fff;
+    border: none; border-radius: 8px;
+    padding: 8px 16px; font-size: 13px; font-weight: 700;
+    cursor: pointer; transition: background .2s; white-space: nowrap;
+  }
+  .listen-btn:hover { background: #237f8f; }
+  .listen-btn.playing { background: var(--navy); }
+  .listen-btn.playing:hover { background: var(--navy-deep); }
+  .listen-label { font-size: 12px; color: var(--teal); font-weight: 600; flex: 1; }
+  .listen-progress {
+    height: 4px; background: var(--gray-200); border-radius: 4px;
+    flex: 1; overflow: hidden; min-width: 60px; display: none;
+  }
+  .listen-progress.active { display: block; }
+  .listen-progress-fill {
+    height: 100%; background: var(--teal);
+    border-radius: 4px; width: 0%; transition: width .5s linear;
+  }
 
   /* ── QUIZ ── */
   .quiz-wrap { }
@@ -1202,6 +1231,7 @@ function goBack() {
 }
 
 function renderSlide() {
+  stopSpeech();
   const total = currentModule.slides.length + 1; // +1 for quiz
   const fill = Math.round((currentSlide / total) * 100);
   document.getElementById('slideProgressFill').style.width = fill + '%';
@@ -1211,6 +1241,11 @@ function renderSlide() {
   if (currentSlide < currentModule.slides.length) {
     const slide = currentModule.slides[currentSlide];
     body.innerHTML = `
+      <div class="listen-bar">
+        <button class="listen-btn" id="listenBtn" onclick="toggleListen()">🔊 Listen</button>
+        <span class="listen-label" id="listenLabel">Tap to hear this slide read aloud</span>
+        <div class="listen-progress" id="listenProgress"><div class="listen-progress-fill" id="listenProgressFill"></div></div>
+      </div>
       <h3>${slide.title}</h3>
       ${slide.content}
       <div class="slide-nav">
@@ -1226,9 +1261,108 @@ function renderSlide() {
 }
 
 function goSlide(dir) {
+  stopSpeech();
   currentSlide += dir;
   renderSlide();
   document.getElementById('moduleBody').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── SPEECH SYNTHESIS ──────────────────────────────────────
+let speechUtterance = null;
+let speechPlaying = false;
+let progressTimer = null;
+
+function getSlideText() {
+  const slide = currentModule.slides[currentSlide];
+  // Strip HTML tags and clean up whitespace
+  const tmp = document.createElement('div');
+  tmp.innerHTML = slide.title + '. ' + slide.content;
+  return tmp.textContent.replace(/\s+/g, ' ').trim();
+}
+
+function toggleListen() {
+  if (speechPlaying) {
+    stopSpeech();
+  } else {
+    startSpeech();
+  }
+}
+
+function startSpeech() {
+  if (!window.speechSynthesis) {
+    toast('Text-to-speech is not supported in this browser.');
+    return;
+  }
+  stopSpeech();
+
+  const text = getSlideText();
+  speechUtterance = new SpeechSynthesisUtterance(text);
+  speechUtterance.rate = 0.92;
+  speechUtterance.pitch = 1.0;
+  speechUtterance.volume = 1.0;
+
+  // Try to use a natural US English voice
+  const voices = window.speechSynthesis.getVoices();
+  const preferred = voices.find(v => v.lang === 'en-US' && v.name.includes('Google'))
+    || voices.find(v => v.lang === 'en-US' && !v.localService)
+    || voices.find(v => v.lang.startsWith('en-US'))
+    || voices.find(v => v.lang.startsWith('en'));
+  if (preferred) speechUtterance.voice = preferred;
+
+  speechUtterance.onstart = () => {
+    speechPlaying = true;
+    const btn = document.getElementById('listenBtn');
+    const label = document.getElementById('listenLabel');
+    const prog = document.getElementById('listenProgress');
+    if (btn) { btn.textContent = '⏹ Stop'; btn.classList.add('playing'); }
+    if (label) label.textContent = 'Reading slide aloud…';
+    if (prog) { prog.classList.add('active'); }
+    animateProgress(text.length);
+  };
+
+  speechUtterance.onend = () => { onSpeechEnd(false); };
+  speechUtterance.onerror = () => { onSpeechEnd(false); };
+
+  window.speechSynthesis.speak(speechUtterance);
+}
+
+function animateProgress(textLen) {
+  // Estimate duration: ~140 words/min at rate 0.92 → adjust per char count
+  const words = textLen / 5;
+  const durationMs = (words / 140) * 60000 / 0.92;
+  const fill = document.getElementById('listenProgressFill');
+  if (!fill) return;
+  fill.style.transition = 'none';
+  fill.style.width = '0%';
+  setTimeout(() => {
+    fill.style.transition = `width ${durationMs}ms linear`;
+    fill.style.width = '100%';
+  }, 50);
+}
+
+function onSpeechEnd(stopped) {
+  speechPlaying = false;
+  clearInterval(progressTimer);
+  const btn = document.getElementById('listenBtn');
+  const label = document.getElementById('listenLabel');
+  const prog = document.getElementById('listenProgress');
+  const fill = document.getElementById('listenProgressFill');
+  if (btn) { btn.textContent = '🔊 Listen'; btn.classList.remove('playing'); }
+  if (label) label.textContent = stopped ? 'Tap to hear this slide read aloud' : '✓ Done — tap to replay';
+  if (prog) prog.classList.remove('active');
+  if (fill) { fill.style.transition = 'none'; fill.style.width = '0%'; }
+}
+
+function stopSpeech() {
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  speechPlaying = false;
+  clearInterval(progressTimer);
+}
+
+// Load voices (Chrome requires this trigger)
+if (window.speechSynthesis) {
+  window.speechSynthesis.getVoices();
+  window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
 }
 
 function renderQuiz() {
