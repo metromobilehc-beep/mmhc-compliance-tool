@@ -554,144 +554,424 @@ const MODULES = [
   // ── NEW HIRE ──────────────────────────────────────────────
   {
     id: 'nh_hipaa',
-    track: ['newhire'],
+    track: ['newhire', 'annual'],
     icon: '🔒',
-    title: 'HIPAA Fundamentals',
-    desc: 'Protected health information, patient rights, and breach protocols.',
+    title: 'HIPAA Comprehensive Training',
+    desc: 'Complete HIPAA training covering PHI, patient rights, permitted disclosures, breach response, social media, and home health-specific scenarios.',
+    passScore: 80,
     slides: [
       {
-        title: 'Why HIPAA Matters',
-        content: `<p>HIPAA — the Health Insurance Portability and Accountability Act — sets national standards for protecting patients' health information. As a home health clinician, you encounter PHI (Protected Health Information) in your daily work.</p>
-        <div class="callout">PHI includes any information that could identify a patient combined with health data: name, address, date of birth, phone number, medical record number, or clinical notes.</div>
-        <p>Violations can result in civil penalties up to <strong>$50,000 per violation</strong> and criminal prosecution for willful neglect. More importantly, breaches erode patient trust.</p>`
+        title: 'What is HIPAA and Why Does It Apply to You?',
+        content: `<p>The Health Insurance Portability and Accountability Act (HIPAA) was enacted in 1996 and establishes national standards for protecting patients' health information. As a Metro Mobile Health Care clinician, HIPAA applies to you every single day — in every patient home, every phone call, and every piece of documentation you create.</p>
+        <div class="callout">HIPAA applies to <strong>covered entities</strong> (health care providers, health plans, clearinghouses) and their <strong>business associates</strong>. Metro Mobile Health Care is a covered entity. You, as a workforce member, are bound by Metro's HIPAA obligations.</div>
+        <p>HIPAA has three main rules you must understand:</p>
+        <ul>
+          <li><strong>Privacy Rule</strong> — governs who can access and use patient health information</li>
+          <li><strong>Security Rule</strong> — governs how electronic PHI must be protected</li>
+          <li><strong>Breach Notification Rule</strong> — governs what must happen when PHI is compromised</li>
+        </ul>`
+      },
+      {
+        title: 'What is Protected Health Information (PHI)?',
+        content: `<p>PHI is any information that can be used to identify a patient AND relates to their health condition, care, or payment for care. HIPAA identifies <strong>18 specific identifiers</strong> that make health information "protected."</p>
+        <p>The 18 PHI identifiers include:</p>
+        <ul>
+          <li>Name, address, city, county, zip code</li>
+          <li>Dates (birth date, admission date, discharge date, date of death)</li>
+          <li>Phone numbers, fax numbers, email addresses</li>
+          <li>Social Security numbers, medical record numbers, account numbers</li>
+          <li>Health plan beneficiary numbers, certificate/license numbers</li>
+          <li>Vehicle identifiers, device identifiers, web URLs</li>
+          <li>IP addresses, biometric identifiers (fingerprints, voiceprints)</li>
+          <li>Full-face photographs and any comparable images</li>
+          <li>Any other unique identifying number or code</li>
+        </ul>
+        <div class="callout warn">Even <strong>de-identified</strong> information can become PHI if combined with other details. "My patient in Broken Arrow who had a stroke" may identify someone even without a name.</div>`
+      },
+      {
+        title: 'Electronic PHI (ePHI) and the Security Rule',
+        content: `<p>Electronic PHI (ePHI) is any PHI that is created, stored, transmitted, or received electronically. This includes:</p>
+        <ul>
+          <li>Patient records in agency EMRs (CareFicient, BIOS, HelloNote, PointCare, HCHB)</li>
+          <li>Emails or messages containing patient information</li>
+          <li>Photos of wounds or clinical documentation taken on a device</li>
+          <li>Voice recordings of clinical notes</li>
+          <li>Spreadsheets or documents containing patient lists</li>
+        </ul>
+        <p>The Security Rule requires three types of safeguards for ePHI:</p>
+        <ul>
+          <li><strong>Administrative:</strong> policies, training, access controls, risk assessments</li>
+          <li><strong>Physical:</strong> device security, screen locks, secure workstations</li>
+          <li><strong>Technical:</strong> encryption, automatic logoff, audit logs</li>
+        </ul>
+        <div class="callout">Agency EMRs log every access, every note opened, and every change made. These logs are auditable by the agency, Metro, and federal investigators.</div>`
       },
       {
         title: 'The Minimum Necessary Standard',
-        content: `<p>Only access, use, or share the minimum amount of PHI needed to do your job.</p>
+        content: `<p>HIPAA requires that you use, disclose, or request only the <strong>minimum amount of PHI necessary</strong> to accomplish the intended purpose. This is not just a best practice — it is a legal requirement.</p>
+        <p>In practice this means:</p>
         <ul>
-          <li>Only open patient records for patients on your active caseload</li>
-          <li>Don't share clinical details in conversations where others can overhear</li>
-          <li>Do not discuss patient information in public spaces, waiting rooms, or social settings</li>
-          <li>Agency EMRs (CareFicient, BIOS, HelloNote, etc.) log all access — treat every login as auditable</li>
+          <li>Only open patient records for patients currently on your active caseload</li>
+          <li>Do not review clinical history beyond what is needed for your visit today</li>
+          <li>Do not share a patient's full chart when a summary will do</li>
+          <li>Do not copy or download patient records to personal devices</li>
+          <li>When communicating with agencies, share only clinically relevant details</li>
         </ul>
-        <div class="callout warn">Never photograph a patient's face, identifying information, or clinical documentation on a personal device without explicit written authorization.</div>`
+        <div class="callout warn">Curiosity is not a permissible reason to access PHI. Accessing records of a neighbor, family member, or former patient you are no longer treating is a HIPAA violation — even if you mean no harm.</div>`
       },
       {
-        title: 'Mobile Device Rules',
-        content: `<p>Metro issues Samsung Galaxy Tabs for clinical documentation. Follow these rules on all devices used for work:</p>
+        title: 'Permitted Uses and Disclosures',
+        content: `<p>HIPAA does not prohibit all sharing of PHI — it regulates it. PHI may be used or disclosed without patient authorization for:</p>
         <ul>
-          <li>Keep the tablet locked when not in use (auto-lock after 2 minutes)</li>
-          <li>Use the tablet only for work purposes — no personal apps or social media</li>
-          <li>Never save patient information to personal phones or email accounts</li>
-          <li>Report a lost or stolen tablet to Stephen or Evan <strong>immediately</strong></li>
-          <li>ConnectTeam messages containing PHI must be deleted after clinical use</li>
+          <li><strong>Treatment:</strong> sharing with other treating clinicians, ordering physicians, or care team members</li>
+          <li><strong>Payment:</strong> billing agencies for services rendered</li>
+          <li><strong>Health Care Operations:</strong> quality improvement, training, compliance audits</li>
+          <li><strong>Public Health Activities:</strong> reporting communicable diseases to health departments</li>
+          <li><strong>Mandatory Reporting:</strong> abuse, neglect, or exploitation reporting required by law</li>
+          <li><strong>Law Enforcement:</strong> only under specific legal requirements</li>
         </ul>
-        <div class="callout danger">Do not text PHI through standard SMS. Use agency-approved communication channels only.</div>`
+        <div class="callout">The <strong>Treatment, Payment, and Operations (TPO)</strong> exceptions cover most of your daily clinical work. When in doubt whether a disclosure is covered, ask Metro leadership before sharing.</div>`
       },
       {
-        title: 'Breach Reporting',
-        content: `<p>A breach is any unauthorized acquisition, access, use, or disclosure of PHI. Examples:</p>
+        title: 'When Authorization IS Required',
+        content: `<p>A written, signed patient authorization is required before disclosing PHI in situations not covered by TPO or other permitted exceptions. Common scenarios requiring authorization:</p>
         <ul>
-          <li>Sending a clinical note to the wrong patient's contact</li>
-          <li>Leaving printed records visible in your vehicle</li>
+          <li>Releasing records to the patient's attorney or insurance company (unless for payment)</li>
+          <li>Sharing information with a family member or caregiver the patient has not designated</li>
+          <li>Using a patient's story or image in marketing materials</li>
+          <li>Sharing information with an employer (even the patient's own employer)</li>
+          <li>Releasing records to a school or other non-treating entity</li>
+          <li>Research purposes beyond treatment</li>
+        </ul>
+        <div class="callout danger">A patient's family member calling to "check in" does not have an automatic right to PHI. Verify the patient has designated them as an authorized contact before disclosing anything.</div>`
+      },
+      {
+        title: 'Patient Rights Under HIPAA',
+        content: `<p>HIPAA grants patients specific rights regarding their health information. As a clinician, you must respect and support these rights:</p>
+        <ul>
+          <li><strong>Right to Access:</strong> Patients can request copies of their own records. Requests must be fulfilled within 30 days.</li>
+          <li><strong>Right to Amend:</strong> Patients can request corrections to their records if they believe information is inaccurate.</li>
+          <li><strong>Right to an Accounting of Disclosures:</strong> Patients can request a list of who their PHI has been shared with.</li>
+          <li><strong>Right to Restrict:</strong> Patients can request restrictions on certain uses or disclosures (though providers are not always required to agree).</li>
+          <li><strong>Right to Confidential Communications:</strong> Patients can request to receive communications in a specific way or location.</li>
+          <li><strong>Right to File a Complaint:</strong> Patients can file complaints with Metro or directly with the HHS Office for Civil Rights — without fear of retaliation.</li>
+        </ul>
+        <div class="callout warn">Never retaliate against a patient for exercising their HIPAA rights or filing a complaint. Retaliation is itself a HIPAA violation.</div>`
+      },
+      {
+        title: 'Home Health-Specific Privacy Challenges',
+        content: `<p>Home health creates unique privacy challenges that clinic-based providers don't face. Be aware of these specific scenarios:</p>
+        <ul>
+          <li><strong>Caregivers present during visits:</strong> Not all caregivers are authorized to receive PHI. Verify designation before discussing clinical information in their presence.</li>
+          <li><strong>Neighbors and visitors:</strong> Anyone who happens to be at the home during your visit has no right to PHI. Move to a private space or ask non-authorized individuals to step out.</li>
+          <li><strong>Phone calls during visits:</strong> Avoid taking calls involving other patients' PHI while in a patient's home. Others in the room can overhear.</li>
+          <li><strong>Documentation visible in the car:</strong> Never leave printed patient records, evaluations, or schedules visible in your vehicle.</li>
+          <li><strong>Scheduling conversations:</strong> Even confirming a patient's name and address in a public setting (gas station, restaurant) can constitute a disclosure.</li>
+        </ul>`
+      },
+      {
+        title: 'Mobile Devices and ePHI Security',
+        content: `<p>Your Metro-issued Samsung Galaxy Tab and any personal device used for work must be handled with strict security controls.</p>
+        <p><strong>Metro tablet requirements:</strong></p>
+        <ul>
+          <li>Auto-lock enabled — screen locks within 2 minutes of inactivity</li>
+          <li>Managed by Knox MDM — Metro can remotely wipe if lost or stolen</li>
+          <li>Work use only — no personal apps, social media, or family sharing</li>
+          <li>Never leave unattended in a vehicle, especially overnight</li>
+        </ul>
+        <p><strong>Personal device rules:</strong></p>
+        <ul>
+          <li>Do not save, forward, or store PHI on personal phones or personal email accounts</li>
+          <li>Do not use personal iCloud, Google Drive, or Dropbox to store patient information</li>
+          <li>Do not photograph patients, wounds, or clinical documents on a personal device without a signed authorization and agency approval</li>
+        </ul>
+        <div class="callout danger">Standard text messaging (SMS) is not HIPAA compliant. Never send PHI via regular text message. Use only agency-approved secure messaging platforms.</div>`
+      },
+      {
+        title: 'Social Media and HIPAA',
+        content: `<p>Social media is one of the fastest-growing sources of HIPAA violations in healthcare. The informal nature of social media creates a false sense of safety — but HIPAA applies fully to everything you post online.</p>
+        <p><strong>Never post:</strong></p>
+        <ul>
+          <li>Patient names, even with a positive intent ("So proud of my patient John for walking today!")</li>
+          <li>Information that could identify a patient — diagnosis + location + approximate age is enough</li>
+          <li>Photos from a patient's home, even if the patient is not in the photo</li>
+          <li>"Feel good" progress stories without a signed, HIPAA-compliant written authorization</li>
+          <li>Complaints about difficult patients, even without names — context can identify</li>
+        </ul>
+        <p><strong>Group chats and messaging apps:</strong></p>
+        <ul>
+          <li>Clinician group chats (WhatsApp, iMessage, Facebook Messenger) must never contain PHI</li>
+          <li>"Can anyone cover Mrs. Smith on Elm Street tomorrow?" in a group text is a HIPAA violation</li>
+          <li>Use ConnectTeam for Metro scheduling communication — reference visit IDs, not patient names</li>
+        </ul>`
+      },
+      {
+        title: 'What is a HIPAA Breach?',
+        content: `<p>A breach is the unauthorized acquisition, access, use, or disclosure of PHI in a manner that compromises the security or privacy of the information. Not every incident is a breach — but all incidents must be assessed.</p>
+        <p><strong>Examples of breaches:</strong></p>
+        <ul>
+          <li>Sending a clinical note or evaluation to the wrong patient contact or agency</li>
           <li>Losing a device that contains unencrypted patient data</li>
-          <li>Discussing patient details with a non-treating family member without authorization</li>
+          <li>Leaving printed records where unauthorized individuals could view them</li>
+          <li>Unauthorized access to patient records by a non-treating clinician</li>
+          <li>Posting patient information on social media</li>
+          <li>Emailing PHI to a personal (non-secure) email account</li>
         </ul>
-        <p>Report any suspected breach to Stephen Mace or Evan Flanagan <strong>within 24 hours</strong>. Do not attempt to investigate or remediate on your own. Metro's breach response follows HIPAA's 60-day notification timeline.</p>`
+        <div class="callout warn">There is a <strong>presumption of breach</strong> unless Metro can demonstrate a low probability that PHI was compromised. When in doubt, it is a breach — report it.</div>`
+      },
+      {
+        title: 'Breach Notification Requirements',
+        content: `<p>When a breach occurs, HIPAA requires specific notifications within strict timeframes:</p>
+        <ul>
+          <li><strong>Affected individuals:</strong> Must be notified without unreasonable delay and within <strong>60 days</strong> of discovery</li>
+          <li><strong>HHS (Department of Health and Human Services):</strong> Must be notified within 60 days for breaches affecting 500+ individuals; smaller breaches reported annually</li>
+          <li><strong>Media:</strong> Required for breaches affecting 500+ residents in a state or jurisdiction</li>
+        </ul>
+        <p><strong>Your role in breach response:</strong></p>
+        <ol>
+          <li>Report any suspected breach to Stephen Mace or Evan Flanagan <strong>within 24 hours of discovery</strong></li>
+          <li>Do not attempt to investigate, remediate, or notify anyone on your own</li>
+          <li>Document exactly what happened, when, and who may have been affected</li>
+          <li>Preserve all evidence — do not delete emails, messages, or files related to the incident</li>
+        </ol>
+        <div class="callout danger">Attempting to cover up or delay reporting a breach is a separate and serious violation. Early reporting protects you as much as it protects the patient.</div>`
+      },
+      {
+        title: 'HIPAA Penalties — What is at Stake',
+        content: `<p>HIPAA violations carry significant civil and criminal penalties. The Office for Civil Rights (OCR) actively investigates complaints and conducts audits.</p>
+        <p><strong>Civil penalties (tiered by culpability):</strong></p>
+        <ul>
+          <li><strong>Did not know:</strong> $100–$50,000 per violation, up to $25,000/year per violation category</li>
+          <li><strong>Reasonable cause:</strong> $1,000–$50,000 per violation, up to $100,000/year</li>
+          <li><strong>Willful neglect, corrected:</strong> $10,000–$50,000 per violation, up to $250,000/year</li>
+          <li><strong>Willful neglect, not corrected:</strong> $50,000 per violation, up to $1.5 million/year</li>
+        </ul>
+        <p><strong>Criminal penalties:</strong></p>
+        <ul>
+          <li>Knowingly obtaining PHI: up to 1 year imprisonment</li>
+          <li>Obtaining PHI under false pretenses: up to 5 years imprisonment</li>
+          <li>Obtaining PHI for personal gain or malicious harm: up to 10 years imprisonment</li>
+        </ul>
+        <div class="callout">Individual workforce members can be held personally liable — penalties are not limited to the organization.</div>`
+      },
+      {
+        title: 'Real-World Scenarios — Test Your Knowledge',
+        content: `<p>Review these scenarios. Think about what the correct action is before moving to the quiz.</p>
+        <p><strong>Scenario A:</strong> You finish a visit and realize you left your printed schedule — which includes patient names, addresses, and visit times — on the patient's kitchen counter.</p>
+        <div class="callout warn">This is a potential breach. Report to Metro leadership immediately. The schedule contains PHI of multiple patients.</div>
+        <p><strong>Scenario B:</strong> A patient's adult son calls you directly to ask about his mother's progress. He says she told him it was okay to call you.</p>
+        <div class="callout warn">Verbal permission from the patient is not sufficient. Verify there is a signed authorization on file with the agency before disclosing any information. Offer to have the patient call you directly instead.</div>
+        <p><strong>Scenario C:</strong> A fellow Metro clinician texts you asking for a patient's phone number because they are covering the visit tomorrow.</p>
+        <div class="callout warn">Do not send PHI via standard text. Ask the clinician to get the contact information through ConnectTeam or directly from the agency scheduler.</div>`
+      },
+      {
+        title: 'Metro-Specific HIPAA Contacts and Resources',
+        content: `<p>Metro Mobile Health Care takes HIPAA compliance seriously. Here is who to contact and what to do:</p>
+        <p><strong>Report a breach or suspected violation:</strong></p>
+        <ul>
+          <li>Stephen Mace, DPT — <strong>within 24 hours</strong> of discovery</li>
+          <li>Evan Flanagan, PT — backup contact if Stephen is unavailable</li>
+          <li>Do not delay reporting out of fear of consequences — good-faith reporting is protected</li>
+        </ul>
+        <p><strong>Questions about whether something is permitted:</strong></p>
+        <ul>
+          <li>When in doubt, don't disclose — ask Metro leadership first</li>
+          <li>The safer choice is always to protect the information until you have clarity</li>
+        </ul>
+        <p><strong>Patient complaints:</strong></p>
+        <ul>
+          <li>Patients have the right to file complaints with Metro or directly with HHS OCR at <strong>hhs.gov/ocr</strong></li>
+          <li>If a patient expresses concern about privacy, take it seriously and report it to Metro immediately</li>
+        </ul>
+        <div class="callout">This training fulfills the annual HIPAA education requirement under 45 CFR §164.530(b). Your signed attestation upon completion is your compliance record.</div>`
       }
     ],
     quiz: [
       {
-        q: 'A patient\'s neighbor asks you how the patient is doing during your home visit. You should:',
-        options: ['Give a brief update since they clearly know the patient', 'Politely decline and explain you cannot discuss any patient information', 'Provide general information but not clinical details', 'Check the patient\'s chart for an authorization before answering'],
+        q: 'Which of the following is NOT one of HIPAA\'s 18 PHI identifiers?',
+        options: ['A patient\'s zip code', 'A patient\'s favorite color', 'A patient\'s device serial number', 'A patient\'s IP address'],
         answer: 1,
-        explanation: 'You cannot disclose any PHI to third parties without a signed authorization, regardless of how well they know the patient.'
+        explanation: 'A patient\'s favorite color has no connection to their identity or health information and is not a PHI identifier. All others — zip code, device serial number, and IP address — are among the 18 identifiers.'
       },
       {
-        q: 'You accidentally left a printed evaluation in a patient\'s driveway during a home visit. What is the correct first step?',
-        options: ['Return to retrieve it and hope no one saw it', 'Shred it at home and note it in your records', 'Report it to Metro leadership within 24 hours as a potential breach', 'Document it in the patient\'s clinical note'],
+        q: 'The minimum necessary standard requires you to:',
+        options: ['Document the minimum required by the agency', 'Access only the PHI needed to perform your specific job function', 'Share only summary information with physicians', 'Limit patient visits to the minimum covered by insurance'],
+        answer: 1,
+        explanation: 'The minimum necessary standard limits access to and disclosure of PHI to only what is required to accomplish the specific, permitted purpose — not more.'
+      },
+      {
+        q: 'A patient\'s adult daughter is present during your visit and asks you to explain her mother\'s plan of care. You should:',
+        options: ['Explain the plan of care — family members always have access to PHI', 'Ask the patient directly if she would like her daughter included in the discussion', 'Decline to speak with the daughter at all under any circumstances', 'Provide a general overview but withhold specific diagnoses'],
+        answer: 1,
+        explanation: 'The patient controls who receives their PHI. Ask the patient directly if she consents to having her daughter participate. If the patient says yes, you may include the daughter in the discussion.'
+      },
+      {
+        q: 'You receive a text from a fellow Metro clinician asking for a patient\'s phone number to confirm a visit. The correct response is:',
+        options: ['Text the number — it\'s just a phone number, not clinical information', 'Call the clinician and give the number verbally instead', 'Direct the clinician to get the contact information through ConnectTeam or the agency scheduler', 'Only share if the clinician is covering the visit the same day'],
         answer: 2,
-        explanation: 'Any potential unauthorized disclosure of PHI must be reported promptly to Metro leadership so a proper breach assessment can be conducted.'
+        explanation: 'A patient\'s phone number is PHI. Standard text messaging is not HIPAA-compliant. The clinician should obtain contact information through approved channels — ConnectTeam or the agency scheduler.'
       },
       {
-        q: 'The minimum necessary standard means:',
-        options: ['Access only the patient information needed to do your job', 'Provide the minimum amount of documentation required by the agency', 'Only treat patients with the minimum required insurance coverage', 'Review only the most recent visit notes'],
-        answer: 0,
-        explanation: 'The minimum necessary standard restricts access to PHI to only what is required to complete your specific professional task.'
+        q: 'A clinician posts on social media: "Incredible day — my 78-year-old patient in Sand Springs finally walked 50 feet after her hip replacement!" This post:',
+        options: ['Is acceptable because no name was included', 'Is acceptable because it is a positive story about patient progress', 'Is a potential HIPAA violation because it could enable patient identification', 'Is acceptable if the clinician\'s profile is set to private'],
+        answer: 2,
+        explanation: 'Age + location + diagnosis + procedure creates a combination that may identify the patient. HIPAA violations do not require a name. A private social media profile does not protect against HIPAA liability.'
+      },
+      {
+        q: 'You discover you accidentally emailed a patient\'s evaluation to the wrong agency contact. What do you do first?',
+        options: ['Send a follow-up email asking them to delete it', 'Report the incident to Metro leadership within 24 hours', 'Document it in the patient\'s chart and move on', 'Contact the recipient and ask them to confirm they deleted it'],
+        answer: 1,
+        explanation: 'Any potential breach must be reported to Metro leadership within 24 hours. Do not attempt to handle it independently — Metro must conduct a breach assessment and may have notification obligations.'
+      },
+      {
+        q: 'Which of the following is a permitted disclosure of PHI without patient authorization?',
+        options: ['Sharing a patient\'s records with their employer at the employer\'s request', 'Discussing a patient\'s clinical status with the treating physician coordinating care', 'Posting a patient success story on Metro\'s website', 'Providing a patient\'s address to a neighbor who says they are checking on them'],
+        answer: 1,
+        explanation: 'Sharing clinical information with other treating providers falls under the Treatment exception to HIPAA — no authorization is required. All other options require written patient authorization.'
+      },
+      {
+        q: 'Under HIPAA\'s Breach Notification Rule, affected individuals must be notified:',
+        options: ['Within 24 hours of the breach being discovered', 'Within 30 days of the breach being discovered', 'Within 60 days of the breach being discovered', 'Within 90 days of the breach being discovered'],
+        answer: 2,
+        explanation: 'HIPAA requires notification to affected individuals within 60 days of discovery of a breach. This is Metro\'s obligation — your obligation is to report to Metro leadership within 24 hours so Metro can meet its deadlines.'
+      },
+      {
+        q: 'A patient tells you verbally that it is okay for you to speak with her son about her care. You should:',
+        options: ['Proceed — verbal consent from the patient is sufficient', 'Verify there is a signed authorization on file with the agency before disclosing any PHI to the son', 'Only discuss general progress, not clinical details', 'Document the verbal consent in your visit note and proceed'],
+        answer: 1,
+        explanation: 'HIPAA requires written authorization for disclosures to family members outside of the treatment context. Verbal consent is not sufficient. Verify a signed authorization is on file with the agency.'
+      },
+      {
+        q: 'An individual who knowingly obtains PHI for personal gain faces:',
+        options: ['A written warning and mandatory retraining', 'Civil penalties only — up to $50,000', 'Up to 10 years imprisonment and criminal penalties', 'Suspension of clinical license only'],
+        answer: 2,
+        explanation: 'HIPAA\'s criminal penalties for obtaining PHI for personal gain or malicious harm include up to 10 years imprisonment. Individual workforce members — not just organizations — can face criminal prosecution.'
       }
     ]
   },
 
+  // ── OSHA & FIELD SAFETY ───────────────────────────────────
   {
-    id: 'nh_osha',
+    id: 'osha_safety',
     track: ['newhire', 'annual'],
     icon: '🦺',
     title: 'OSHA & Field Safety',
-    desc: 'Workplace hazards, infection control, and home environment safety.',
+    desc: 'Workplace hazards, bloodborne pathogens, personal safety, and vehicle safety in home health.',
+    passScore: 80,
     slides: [
-      {
-        title: 'Home Health Hazards are Unique',
-        content: `<p>Unlike a clinic, you have no control over the patient's environment. Common hazards in home health include:</p>
-        <ul>
-          <li><strong>Biohazards:</strong> blood, wound drainage, body fluids, sharps</li>
-          <li><strong>Environmental:</strong> cluttered spaces, poor lighting, unsafe flooring, pets, smoke</li>
-          <li><strong>Physical:</strong> lifting/transferring without equipment, stair navigation</li>
-          <li><strong>Personal safety:</strong> unfamiliar neighborhoods, aggressive animals or individuals</li>
-        </ul>
-        <div class="callout">You always have the right to leave a situation that feels unsafe. Contact Metro leadership if you feel threatened or unsafe at any patient home.</div>`
-      },
-      {
-        title: 'Standard Precautions',
-        content: `<p>Apply standard precautions with <strong>every patient, every visit</strong> — regardless of diagnosis.</p>
-        <ul>
-          <li>Perform hand hygiene before and after patient contact</li>
-          <li>Wear gloves when contact with blood, body fluids, or wound sites is possible</li>
-          <li>Use masks when respiratory precautions are indicated</li>
-          <li>Dispose of sharps in an approved sharps container — never recap needles</li>
-          <li>Transport supplies in a sealed clinical bag; keep bag off the floor</li>
-        </ul>
-        <p>Metro provides PPE upon request. If you need supplies, contact Kym or Stephen before your visit schedule is depleted.</p>`
-      },
-      {
-        title: 'Bloodborne Pathogen Exposure',
-        content: `<p>If you experience a needlestick, splash to mucous membranes, or skin exposure to blood or body fluids:</p>
-        <ol>
-          <li>Wash the site with soap and water for at least 60 seconds</li>
-          <li>For eye/mouth exposure, flush with clean water for 15+ minutes</li>
-          <li>Report to Metro leadership immediately — same day</li>
-          <li>Seek medical evaluation within 2 hours for possible post-exposure prophylaxis</li>
-          <li>Document the incident in writing with date, time, circumstances</li>
-        </ol>
-        <div class="callout danger">Do not delay reporting. Post-exposure prophylaxis is time-sensitive.</div>`
-      },
-      {
-        title: 'Vehicle and Travel Safety',
-        content: `<p>Significant portions of your workday are spent in transit. Follow these guidelines:</p>
-        <ul>
-          <li>Never use a phone for calls or texts while driving — pull over if needed</li>
-          <li>Keep clinical supplies secured in the trunk or a closed bag — nothing on seats that can become projectiles</li>
-          <li>If visiting an area that feels unsafe, you may park nearby and confirm with Metro before entering</li>
-          <li>Keep your vehicle maintained — you are responsible for safe operation</li>
-          <li>Log mileage accurately in ConnectTeam for each visit</li>
-        </ul>`
-      }
+      { title: 'OSHA and Home Health — Why It Applies to You', content: `<p>The Occupational Safety and Health Administration (OSHA) sets legally enforceable standards to protect workers from workplace hazards. Home health is one of the most hazardous healthcare settings because you work in environments you cannot control.</p><div class="callout">OSHA standards that directly apply to home health clinicians include the Bloodborne Pathogens Standard (29 CFR 1910.1030), Hazard Communication Standard, and Personal Protective Equipment Standard.</div><p>Metro Mobile Health Care is responsible for providing you with a safe working environment, hazard training, and appropriate PPE. You are responsible for following safety protocols on every visit, every day.</p>` },
+      { title: 'Home Environment Hazards', content: `<p>Unlike a clinic, you have no control over the patient's home. Before beginning any visit, do a quick visual scan for:</p><ul><li><strong>Trip and fall hazards:</strong> loose rugs, cluttered pathways, poor lighting, uneven flooring, pets underfoot</li><li><strong>Structural hazards:</strong> unstable furniture, broken stairs, unsafe porches</li><li><strong>Air quality hazards:</strong> heavy smoke, mold, chemical odors, pest infestations</li><li><strong>Temperature extremes:</strong> no air conditioning in summer, inadequate heat in winter</li><li><strong>Unsafe equipment:</strong> malfunctioning medical equipment, oxygen in use near open flames</li></ul><div class="callout warn">Document any unsafe home conditions in your clinical note. If the environment poses an immediate danger, you have the right to leave and report to Metro immediately.</div>` },
+      { title: 'Personal Safety in the Field', content: `<p>Your personal safety is always the first priority. No visit is worth compromising your safety.</p><ul><li>Review the patient's address and neighborhood before your visit</li><li>Park in a well-lit, visible location; lock your vehicle every time</li><li>Trust your instincts — if something feels wrong at the door, you do not have to enter</li><li>If you encounter aggressive individuals or animals: leave immediately, call 911 if needed, then notify Metro</li><li>Do not wear excessive jewelry or carry large amounts of cash</li><li>Keep your phone charged and accessible at all times</li></ul><div class="callout danger">Never enter a home where you observe active domestic violence, weapon presence, or feel your physical safety is at immediate risk. Call 911 and notify Metro.</div>` },
+      { title: 'Standard Precautions — Every Patient, Every Visit', content: `<p>Standard precautions treat all blood, body fluids, secretions, and mucous membranes as potentially infectious — regardless of a patient's known diagnosis.</p><p><strong>Required at all times:</strong></p><ul><li>Hand hygiene before and after every patient contact</li><li>Gloves when contact with blood, body fluids, wounds, or mucous membranes is anticipated</li><li>Gown when clothing may become contaminated with body fluids</li><li>Mask and eye protection when splashing of body fluids is possible</li></ul><p>Transmission-based precautions (contact, droplet, airborne) are added when a patient has a known or suspected transmissible infection.</p>` },
+      { title: 'Personal Protective Equipment (PPE)', content: `<p>Metro provides PPE upon request. You are responsible for having appropriate supplies before beginning your schedule.</p><p><strong>Gloves:</strong></p><ul><li>Use non-sterile exam gloves for routine patient contact</li><li>Change gloves between tasks if moving from a contaminated to clean area</li><li>Never wash and reuse disposable gloves</li><li>Remove gloves without touching the outer surface — perform hand hygiene immediately after</li></ul><p><strong>Masks:</strong></p><ul><li>Surgical masks for droplet precautions</li><li>N95 respirators for airborne precautions (TB, measles, varicella) — must be fit-tested</li></ul><div class="callout">Contact Kym or Stephen if you need PPE supplies before your schedule depletes.</div>` },
+      { title: 'Bloodborne Pathogens — Your Rights', content: `<p>The OSHA Bloodborne Pathogens Standard protects workers from exposure to HIV, Hepatitis B, Hepatitis C, and other pathogens.</p><p><strong>Your rights:</strong></p><ul><li>Free Hepatitis B vaccination series within 10 days of hire</li><li>Free post-exposure evaluation and follow-up</li><li>Access to exposure and training records</li></ul><p><strong>Work practice controls:</strong></p><ul><li>Never recap needles by hand — use a one-handed scoop technique or safety device</li><li>Dispose of sharps immediately in an approved sharps container</li><li>Keep sharps containers within arm's reach during procedures involving needles</li><li>Never overfill a sharps container — replace when ¾ full</li></ul>` },
+      { title: 'Exposure Incident Response', content: `<p>An exposure incident is any eye, mouth, mucous membrane, non-intact skin, or parenteral contact with blood or potentially infectious materials.</p><p><strong>Immediate response:</strong></p><ol><li>Needlestick or skin contact: wash with soap and water for at least 60 seconds</li><li>Eye or mouth splash: flush with clean water for at least 15 minutes</li><li>Remove contaminated clothing</li></ol><p><strong>Then immediately:</strong></p><ol><li>Report to Stephen Mace or Evan Flanagan — same day</li><li>Seek medical evaluation within 2 hours — PEP for HIV is time-critical</li><li>Document: date, time, how the exposure occurred, body fluid involved</li></ol><div class="callout danger">Do not finish your visit before reporting an exposure. Your health comes first.</div>` },
+      { title: 'Sharps Safety and Biohazard Waste', content: `<p>Home health clinicians regularly encounter sharps in patients' homes. Handle all sharps as if they are contaminated.</p><ul><li>Carry an approved sharps disposal container in your clinical bag</li><li>Dispose of all used sharps immediately after use — never transport loose sharps</li><li>If a patient has an overflowing sharps container, document it and contact the agency for resources</li><li>Biohazard waste (soiled dressings, contaminated gloves) should be placed in a sealed bag before disposal</li><li>Never place biohazard waste in your vehicle for transport</li></ul><div class="callout warn">Never pick up loose sharps with bare hands. Use forceps or a mechanical device.</div>` },
+      { title: 'Ergonomics and Body Mechanics', content: `<p>Musculoskeletal injuries are among the leading causes of lost work time in home health.</p><p><strong>Safe patient handling:</strong></p><ul><li>Assess the patient's transfer ability and environment before any hands-on activity</li><li>Use available equipment — gait belts, transfer boards, grab bars — whenever possible</li><li>Never perform a solo lift of a dependent patient</li><li>Keep your back straight and use your legs when assisting with transfers</li><li>Avoid reaching overhead or working in sustained awkward postures</li></ul><p><strong>Protecting yourself:</strong></p><ul><li>Wear supportive, closed-toe footwear on all visits</li><li>Report any work-related injury or musculoskeletal pain to Metro promptly</li></ul>` },
+      { title: 'Vehicle and Travel Safety', content: `<p>Motor vehicle accidents are a leading cause of work-related fatalities in home health.</p><ul><li><strong>No phone use while driving</strong> — pull over completely before making or receiving calls</li><li>Never text while driving under any circumstances</li><li>Plan your route before leaving — do not use GPS navigation while moving in unfamiliar areas</li><li>Keep clinical supplies secured in the trunk — unsecured items become projectiles in a crash</li><li>Do not leave patient records or devices visible in your parked vehicle</li><li>Log mileage accurately in ConnectTeam immediately after each visit</li></ul><div class="callout">If involved in a vehicle accident during work hours, notify Metro the same day. Workers' compensation coverage may apply.</div>` },
+      { title: 'Hazard Communication', content: `<p>Patients' homes may contain cleaning products, pesticides, medications, and other chemical hazards.</p><ul><li>If you encounter strong chemical odors or inadequate ventilation — ventilate the area or step outside</li><li>Never mix unknown substances or handle unlabeled containers</li><li>Oxygen-enriched environments (patients on home O2) are a fire risk — no open flames, no smoking</li><li>If a patient has a substance use disorder, be aware of drug paraphernalia hazards including sharps</li></ul><p><strong>Poison Control:</strong> 1-800-222-1222 (24/7)</p>` },
+      { title: 'Reporting Work-Related Injuries', content: `<p>All work-related injuries, illnesses, and near-misses must be reported to Metro promptly.</p><p><strong>Report immediately (same day):</strong></p><ul><li>Any bloodborne pathogen exposure</li><li>Any injury requiring medical attention</li><li>Any motor vehicle accident during work hours</li><li>Any physical threat or assault</li></ul><p><strong>Report within 24 hours:</strong></p><ul><li>Any near-miss incident</li><li>Any unsafe home condition that prevented completion of care</li><li>Any musculoskeletal strain that may be work-related</li></ul><div class="callout">Oklahoma workers' compensation requires timely reporting. Delays can affect your eligibility for benefits.</div>` }
     ],
     quiz: [
-      {
-        q: 'Standard precautions apply:',
-        options: ['Only to patients with known infectious diseases', 'When the patient or family requests them', 'To every patient, every visit', 'Only during wound care or blood draws'],
-        answer: 2,
-        explanation: 'Standard precautions are applied universally — you cannot always know a patient\'s infectious status, so you protect yourself and your patients with every contact.'
-      },
-      {
-        q: 'You experience a needlestick during a visit. Your immediate first action is:',
-        options: ['Finish the visit and report when you return to the office', 'Wash the site with soap and water for at least 60 seconds', 'Apply a bandage and monitor for symptoms', 'Call your primary care physician to schedule an appointment'],
-        answer: 1,
-        explanation: 'Immediately wash the exposure site, then report to Metro leadership and seek medical evaluation within 2 hours for possible post-exposure prophylaxis.'
-      }
+      { q: 'Standard precautions apply to:', options: ['Only patients with known infectious diseases', 'Only during wound care or procedures involving blood', 'Every patient, every visit, regardless of diagnosis', 'Only when the agency specifies precautions in the orders'], answer: 2, explanation: 'Standard precautions are universal — applied to every patient on every visit. You treat all blood and body fluids as potentially infectious.' },
+      { q: 'You experience a needlestick while providing wound care. After washing the site, your next immediate action is:', options: ['Finish the visit and report when you get home', 'Report to Metro leadership the same day and seek medical evaluation within 2 hours', 'Monitor the site for signs of infection over the next week', 'File an incident report online when convenient'], answer: 1, explanation: 'Post-exposure prophylaxis for HIV is time-critical — most effective within 2 hours. Report to Metro immediately and seek medical evaluation the same day.' },
+      { q: 'You arrive at a patient\'s home and smell a strong unknown chemical odor inside. You should:', options: ['Proceed with the visit — odors are common in home settings', 'Open windows to ventilate and begin the visit', 'Step outside, do not enter, and contact Metro and the agency before proceeding', 'Ask the patient what the smell is and decide from there'], answer: 2, explanation: 'Strong unknown chemical odors represent a potential hazard. Do not enter until the situation is assessed. Your safety is the priority.' },
+      { q: 'A sharps container in a patient\'s home is overflowing. You should:', options: ['Empty it into a bag and dispose of it in the trash', 'Document it in the clinical note and contact the agency for sharps disposal resources', 'Bring it back to Metro for proper disposal', 'Cap it and leave it on the counter'], answer: 1, explanation: 'Document the unsafe condition and contact the agency. Never handle an overfull sharps container or transport sharps in your vehicle.' },
+      { q: 'Under the OSHA Bloodborne Pathogens Standard, Metro is required to offer you:', options: ['Annual flu shots at no cost', 'Free Hepatitis B vaccination within 10 days of hire', 'Free N95 respirators for all visits', 'Monthly bloodborne pathogen testing'], answer: 1, explanation: 'OSHA\'s Bloodborne Pathogens Standard requires employers to offer the Hepatitis B vaccination series free of charge within 10 working days of hire.' },
+      { q: 'You are driving between visits and receive an urgent call from Metro. You should:', options: ['Answer using speakerphone since it\'s work-related', 'Answer using a Bluetooth headset', 'Pull over safely and completely before answering', 'Call back when you arrive at the next patient\'s home'], answer: 2, explanation: 'Pull over completely before handling any call. Distracted driving significantly increases crash risk. No call is worth a motor vehicle accident.' }
     ]
   },
 
+  // ── ABUSE, NEGLECT & EXPLOITATION ────────────────────────
+  {
+    id: 'abuse_neglect',
+    track: ['newhire', 'annual'],
+    icon: '🛡️',
+    title: 'Abuse, Neglect & Exploitation',
+    desc: 'Mandatory reporter obligations, recognition of signs, reporting protocols, and Oklahoma law.',
+    passScore: 80,
+    slides: [
+      { title: 'You Are a Mandatory Reporter', content: `<p>As a licensed healthcare clinician in Oklahoma, you are legally designated as a <strong>mandatory reporter</strong> of suspected abuse, neglect, and exploitation. This is a legal obligation that comes with your license and your role.</p><p>You are required to report reasonable suspicion of abuse, neglect, or exploitation involving:</p><ul><li>Adults age 65 and older</li><li>Adults with physical or developmental disabilities who may be vulnerable</li><li>Children under age 18 present in any household you enter</li></ul><div class="callout danger">You do not need proof. You do not need to investigate. <strong>Reasonable suspicion is sufficient and required.</strong> Failure to report is a criminal offense under Oklahoma law (Title 43A O.S. § 10-104).</div>` },
+      { title: 'Good Faith Protection', content: `<p>Oklahoma law provides strong protections for mandatory reporters who report in good faith.</p><ul><li>A report made in good faith is <strong>immune from civil and criminal liability</strong> — even if the investigation does not confirm abuse</li><li>You are protected from retaliation by your employer for making a good-faith report</li><li>Your identity as the reporter is kept confidential during investigations</li></ul><p>The standard is good faith — not certainty. If you have a reasonable belief that abuse may be occurring, you are legally protected in reporting it.</p><div class="callout">The fear of being wrong is not a valid reason to withhold a report. The system is designed to investigate — your role is only to report what you observe.</div>` },
+      { title: 'Recognizing Physical Abuse', content: `<p>Physical abuse is the intentional use of physical force that results in pain, injury, or impairment. Signs include:</p><ul><li>Bruising in unusual locations — inner arms, torso, buttocks, back of legs</li><li>Bruises in various stages of healing suggesting repeated incidents</li><li>Injuries inconsistent with the explanation given</li><li>Burns with defined edges (cigarette burns, immersion burns)</li><li>Welts, bite marks, or injuries in the shape of an object</li><li>Patient flinches, withdraws, or appears fearful when touched</li></ul><div class="callout warn">Document objectively — describe what you see, not what you conclude. "3 cm yellow-green bruise, medial left upper arm, patient states unsure how it occurred" rather than "patient appears to be abused."</div>` },
+      { title: 'Recognizing Neglect', content: `<p>Neglect is the failure of a caregiver to provide necessary care to maintain the health, safety, and welfare of a vulnerable person.</p><p><strong>Signs in adults:</strong></p><ul><li>Malnutrition, dehydration, significant unintentional weight loss</li><li>Poor personal hygiene — soiled clothing, body odor, untreated skin breakdown</li><li>Untreated medical conditions or worsening wounds without explanation</li><li>Medication not being administered or refilled</li><li>Home environment unsafe — no heat/cooling, no food, pest infestation</li><li>Patient left alone for extended periods without ability to summon help</li></ul><p><strong>Signs in children present in the home:</strong></p><ul><li>Appears hungry, dirty, or inadequately dressed for weather</li><li>Untreated medical or dental conditions</li></ul>` },
+      { title: 'Recognizing Financial Exploitation', content: `<p>Financial exploitation is one of the most common — and most underreported — forms of elder abuse.</p><p><strong>Warning signs:</strong></p><ul><li>Sudden changes in financial situation — unpaid bills, utilities shut off, no money for medication</li><li>A new person has taken control of finances</li><li>Patient confused about or unaware of their financial situation</li><li>Missing valuables, jewelry, or cash</li><li>Large, unexplained withdrawals from bank accounts</li><li>Patient pressured to change will, power of attorney, or beneficiary designations</li><li>Caregiver speaks for the patient excessively, especially about money</li></ul><div class="callout warn">Financial exploitation often co-occurs with physical or emotional abuse.</div>` },
+      { title: 'Recognizing Emotional Abuse', content: `<p>Emotional abuse is among the most damaging but hardest to identify.</p><p><strong>Signs to watch for:</strong></p><ul><li>Patient appears fearful, anxious, or withdrawn — especially when the caregiver enters the room</li><li>Patient looks to caregiver before answering your questions</li><li>Caregiver speaks to patient in a degrading or dismissive manner</li><li>Patient is not allowed to speak privately with you</li><li>Patient reports feeling worthless or deserving of punishment</li><li>Caregiver threatens to "put the patient in a nursing home" as a means of control</li></ul><div class="callout">Try to speak with the patient privately during at least part of every visit.</div>` },
+      { title: 'Sexual Abuse and Self-Neglect', content: `<p><strong>Sexual abuse</strong> — any non-consensual sexual contact or exploitation. Signs include:</p><ul><li>Unexplained genital, rectal, or breast injuries</li><li>STIs in a patient with no known sexual activity</li><li>Patient reports of unwanted sexual contact</li><li>Torn, stained, or bloody undergarments</li></ul><p><strong>Self-neglect</strong> — when a vulnerable adult refuses to provide themselves with adequate food, water, shelter, or medical care. Also reportable:</p><ul><li>Living in severely unsafe or unsanitary conditions</li><li>Refusing necessary medical treatment to a degree that poses serious health risk with cognitive impairment affecting decision-making</li></ul><div class="callout warn">A competent adult has the right to make poor choices. Report when cognitive impairment is affecting decision-making capacity.</div>` },
+      { title: 'How to Report in Oklahoma', content: `<p><strong>State reporting:</strong></p><ul><li><strong>Adult Protective Services (APS):</strong> 1-800-522-3511 — available 24/7</li><li><strong>Child Abuse Hotline (DHS):</strong> 1-800-522-3511 — same number, 24/7</li><li>You may also report online at <strong>okdhs.org</strong></li><li>You do NOT need Metro's permission to make a report — you have independent authority as a mandatory reporter</li></ul><p><strong>Metro reporting:</strong></p><ul><li>Notify Stephen Mace or Evan Flanagan the same day you make or plan to make a report</li></ul><p><strong>Agency reporting:</strong></p><ul><li>Document your clinical observations in detail in the agency EMR</li><li>The agency may have additional internal reporting requirements</li></ul>` },
+      { title: 'What NOT to Do', content: `<div class="callout danger"><strong>Do not confront the suspected abuser.</strong> Confrontation can escalate danger and compromise the investigation.</div><ul><li>Do not tell the patient you are going to report — this can trigger retaliation</li><li>Do not promise the patient that nothing will change as a result of the report</li><li>Do not delay your report to gather more evidence</li><li>Do not attempt to conduct your own investigation</li><li>Do not document conclusions — document only objective observations</li><li>Do not share your suspicions with the patient's family members — they may be the abuser</li></ul>` },
+      { title: 'Documentation Best Practices', content: `<p>Your clinical documentation is a critical part of the abuse investigation. Write as if your notes will be read in court — because they may be.</p><p><strong>Document:</strong></p><ul><li>Exact physical findings with size, location, color, and shape</li><li>Patient's exact words — use quotation marks</li><li>Caregiver's explanation of injuries — note inconsistencies</li><li>Patient's affect and behavior in the caregiver's presence vs. alone</li><li>Environmental observations relevant to neglect</li><li>That you made an APS/DHS report and the date and time</li></ul><p><strong>Do not document:</strong></p><ul><li>Your personal conclusions about guilt or causation</li><li>The name of the person you suspect — only document what you observed</li></ul>` }
+    ],
+    quiz: [
+      { q: 'As a mandatory reporter in Oklahoma, you are required to report when:', options: ['You have confirmed evidence that abuse has occurred', 'You have a reasonable suspicion that abuse, neglect, or exploitation may be occurring', 'The patient or family member asks you to report', 'You have discussed the situation with Metro leadership and they agree'], answer: 1, explanation: 'Mandatory reporters are required to report based on reasonable suspicion — not confirmed evidence. Report what you observe and let APS investigate.' },
+      { q: 'A patient\'s caregiver insists on remaining in the room and answers questions before the patient can respond. This is:', options: ['Normal caregiver behavior — they are just being helpful', 'A potential sign of emotional abuse or controlling behavior that warrants further assessment', 'Only concerning if the patient appears physically injured', 'Acceptable as long as the patient does not object'], answer: 1, explanation: 'A caregiver who controls communication and prevents private conversation is a red flag for emotional abuse or exploitation. Try to speak with the patient alone and document your observations.' },
+      { q: 'You observe multiple bruises in various stages of healing on a patient\'s inner arms. The caregiver says "she bruises easily." You should:', options: ['Accept the explanation — elderly patients do bruise easily', 'Document your objective findings and report your concerns to APS and Metro', 'Ask the patient privately if she is being hurt before deciding whether to report', 'Wait one more visit to see if new bruises appear before reporting'], answer: 1, explanation: 'Bruising in unusual locations in various healing stages is a red flag for physical abuse. Document objectively and report based on reasonable suspicion — do not wait for additional evidence.' },
+      { q: 'After identifying suspected abuse, you should confront the caregiver to get their explanation before reporting:', options: ['True — you need all sides of the story before reporting', 'True — the caregiver deserves a chance to explain', 'False — confronting the suspected abuser can endanger the patient and compromise the investigation', 'False — only Metro leadership should confront the caregiver'], answer: 2, explanation: 'Never confront the suspected abuser. Report to APS and Metro — let trained investigators handle it.' },
+      { q: 'The Oklahoma Adult Protective Services reporting hotline is:', options: ['1-800-422-4453', '1-800-522-3511', '1-800-252-8049', '1-888-665-4228'], answer: 1, explanation: '1-800-522-3511 is the Oklahoma APS and DHS Child Abuse Hotline, available 24 hours a day, 7 days a week.' },
+      { q: 'Which is the most appropriate way to document suspected financial exploitation?', options: ['"Patient is being financially exploited by her son."', '"Patient\'s son has taken all her money and is abusing her."', '"Patient states she has no money for food this week. Bills on counter appear past due. Patient states son manages all her finances and she is unsure of her account balances."', '"Financial abuse suspected — reported to APS."'], answer: 2, explanation: 'Document objective observations and exact patient statements in quotation marks. Do not draw conclusions in the chart — that is the investigator\'s determination.' }
+    ]
+  },
+
+  // ── EMERGENCY PROCEDURES ─────────────────────────────────
+  {
+    id: 'emergency_proc',
+    track: ['newhire', 'annual'],
+    icon: '🚨',
+    title: 'Emergency Procedures',
+    desc: 'Medical emergencies, fire, severe weather, critical incidents, and after-hours protocols.',
+    passScore: 80,
+    slides: [
+      { title: 'Your Role in a Patient Emergency', content: `<p>As a licensed clinician in a patient's home, you may be the only trained healthcare professional present when a medical emergency occurs.</p><div class="callout danger">In any life-threatening emergency, <strong>call 911 first</strong>. Do not call Metro, the agency, or the patient's family before calling 911. Every second counts.</div><p>Your general responsibilities:</p><ul><li>Recognize the emergency and activate EMS immediately</li><li>Provide care within your licensure scope until EMS arrives</li><li>Stay with the patient — do not leave to make calls from outside</li><li>Ensure the address is clearly communicated to 911 dispatch</li><li>Notify the agency and Metro as soon as possible after EMS is activated</li><li>Document the event in detail in the agency EMR</li></ul>` },
+      { title: 'Cardiac and Respiratory Emergencies', content: `<p><strong>Signs of cardiac arrest:</strong> unresponsive, not breathing normally, no pulse</p><ol><li>Call 911 immediately</li><li>Begin CPR if trained and within your licensure scope — 30 compressions to 2 breaths, 100-120 compressions/minute</li><li>Use AED if one is available in the home</li><li>Continue until EMS arrives or patient shows signs of life</li></ol><p><strong>Respiratory distress:</strong> labored breathing, use of accessory muscles, cyanosis, dropping O2 sat</p><ul><li>Position patient upright if tolerated</li><li>Administer supplemental O2 if ordered and available</li><li>Call 911 if patient does not respond to initial interventions or condition worsens</li></ul><div class="callout danger">Never transport a patient in your personal vehicle — even in an emergency. Wait for EMS.</div>` },
+      { title: 'Falls During a Visit', content: `<p>A patient fall during your visit is one of the most common clinical emergencies in home health.</p><p><strong>Immediate assessment after a fall:</strong></p><ol><li>Do not move the patient until you have assessed for injury</li><li>Assess for head injury, loss of consciousness, pain, deformity, or inability to move extremities</li><li>If any signs of serious injury — call 911 before moving the patient</li><li>If no signs of serious injury, assist the patient up using safe technique</li></ol><p><strong>After any fall — regardless of apparent injury:</strong></p><ul><li>Document the fall in detail in the agency EMR</li><li>Notify the agency immediately — falls are a required reporting event</li><li>Notify Metro</li><li>Complete any agency-required incident report</li></ul><div class="callout warn">Never attempt to catch a falling patient — redirect to a safe landing if possible. Catching attempts are a leading cause of clinician back injury.</div>` },
+      { title: 'Stroke Recognition — Act FAST', content: `<p>Stroke is a time-sensitive emergency. Use the FAST acronym:</p><p><strong>F — Face:</strong> Ask the patient to smile. Is one side drooping?</p><p><strong>A — Arms:</strong> Ask the patient to raise both arms. Does one arm drift downward?</p><p><strong>S — Speech:</strong> Ask the patient to repeat a simple phrase. Is speech slurred or strange?</p><p><strong>T — Time:</strong> If you observe ANY of these signs, call 911 immediately.</p><div class="callout danger">The treatment window for ischemic stroke (tPA) is approximately 3-4.5 hours from symptom onset. Do not wait to see if symptoms resolve. Note the time symptoms began when you call 911.</div><p>Other stroke signs: sudden severe headache, sudden vision changes, sudden loss of balance or coordination, sudden confusion.</p>` },
+      { title: 'Diabetic Emergencies', content: `<p><strong>Hypoglycemia (low blood sugar — typically &lt;70 mg/dL):</strong></p><ul><li>Signs: shakiness, sweating, confusion, rapid heartbeat, pallor, hunger</li><li>If conscious and can swallow: 15g fast-acting carbohydrates (4 oz juice, glucose tablets)</li><li>Recheck in 15 minutes — repeat if still symptomatic</li><li>If unconscious or cannot swallow safely: call 911 immediately — do not give anything by mouth</li></ul><p><strong>Hyperglycemia / Diabetic Ketoacidosis signs:</strong></p><ul><li>Fruity breath, excessive thirst, frequent urination, nausea, abdominal pain, confusion</li><li>Call 911 for any patient with suspected DKA — this is a life-threatening emergency</li></ul>` },
+      { title: 'Fire Emergency — RACE and PASS', content: `<p><strong>RACE — What to do in a fire:</strong></p><ul><li><strong>R — Rescue:</strong> Remove anyone in immediate danger if safe to do so</li><li><strong>A — Alert:</strong> Call 911 immediately</li><li><strong>C — Contain:</strong> Close doors to slow fire spread</li><li><strong>E — Extinguish/Evacuate:</strong> Use extinguisher for small contained fires only; evacuate for larger fires</li></ul><p><strong>PASS — How to use a fire extinguisher:</strong></p><ul><li><strong>P</strong> — Pull the pin</li><li><strong>A</strong> — Aim at the base of the fire</li><li><strong>S</strong> — Squeeze the handle</li><li><strong>S</strong> — Sweep side to side</li></ul><div class="callout danger">Never use an elevator during a fire. Never re-enter a burning building. Your safety first.</div>` },
+      { title: 'Severe Weather — Oklahoma Specific', content: `<p>Oklahoma is in Tornado Alley. Severe weather can develop rapidly. Metro will never penalize you for a weather-related delay or cancellation.</p><p><strong>Tornado Warning (tornado confirmed or radar indicated):</strong></p><ul><li>Do not begin driving — shelter immediately</li><li>In a patient's home: interior room, lowest floor, away from windows — closets and bathrooms are ideal</li><li>In your vehicle with no shelter: get low in a ditch away from your vehicle — do not shelter under an overpass</li><li>Stay sheltered until the warning expires</li><li>Notify Metro when safe to do so</li></ul><p><strong>Tornado Watch:</strong></p><ul><li>Monitor weather actively — have a weather app with alerts enabled</li><li>Know the shelter location at each patient's home</li></ul>` },
+      { title: 'Patient Death During a Visit', content: `<p><strong>If you arrive and the patient appears deceased:</strong></p><ol><li>Call 911 — do not assume death without assessment</li><li>If no signs of life and rigor or lividity is present, do not disturb the scene</li><li>Notify Metro immediately</li><li>Notify the agency</li><li>Remain on scene until emergency personnel arrive unless unsafe to do so</li></ol><p><strong>Expected death (hospice/comfort measures):</strong></p><ul><li>Follow the agency's protocol for expected death</li><li>Comfort family members present</li><li>Document time, circumstances, and who was notified</li><li>Notify Metro</li></ul><div class="callout warn">Do not administer CPR to a patient with a valid DNR. Verify DNR status at the start of care and document its location in the home.</div>` },
+      { title: 'After-Hours and Critical Incident Reporting', content: `<p>Emergencies don't follow business hours. Know how to reach Metro at any time.</p><p><strong>After-hours Metro contacts:</strong></p><ul><li>Stephen Mace, DPT — primary after-hours contact</li><li>Evan Flanagan, PT — secondary contact</li></ul><p><strong>Critical incidents requiring same-day Metro notification:</strong></p><ul><li>Patient death during or immediately before a scheduled visit</li><li>911 activation for any patient emergency</li><li>Patient fall with injury</li><li>Any situation involving law enforcement</li><li>Any threat to your personal safety</li><li>Any bloodborne pathogen exposure</li><li>Any motor vehicle accident during work hours</li></ul>` }
+    ],
+    quiz: [
+      { q: 'A patient becomes unresponsive during your visit. Your very first action is:', options: ['Call Metro to report the emergency', 'Call the patient\'s family emergency contact', 'Call 911', 'Begin CPR immediately before calling anyone'], answer: 2, explanation: 'Call 911 first in any life-threatening emergency. Notify Metro and the family after EMS is activated.' },
+      { q: 'Using the FAST acronym, which finding indicates a possible stroke requiring immediate 911 activation?', options: ['Patient reports feeling fatigued during the visit', 'One side of the patient\'s face is drooping when asked to smile', 'Patient has an elevated blood pressure reading', 'Patient is confused about what day it is'], answer: 1, explanation: 'Facial drooping is a classic FAST sign of stroke. Any FAST finding warrants immediate 911 activation — do not wait to see if it resolves.' },
+      { q: 'A patient falls while you are present. They are alert and denying pain. You should:', options: ['Help them up immediately and continue the visit', 'Assess for injury before moving them, document the fall, and notify the agency and Metro', 'Complete the visit and document the fall in your next note', 'Only report to Metro if the patient has visible injury'], answer: 1, explanation: 'Assess for injury before moving any patient who has fallen. All falls must be reported to the agency and Metro regardless of apparent injury.' },
+      { q: 'A tornado warning is issued for your area while you are driving between visits. You should:', options: ['Drive quickly to your next patient\'s home for shelter', 'Pull under the nearest overpass for protection', 'Stop driving immediately and find the nearest interior shelter', 'Continue driving carefully and monitor the warning'], answer: 2, explanation: 'Never shelter under an overpass. Stop driving immediately when a tornado warning is issued and find interior shelter.' },
+      { q: 'You arrive for a scheduled visit and find the patient unresponsive with signs suggesting death for several hours. You should:', options: ['Begin CPR immediately', 'Call the patient\'s family first, then Metro', 'Call 911, do not disturb the scene, notify Metro, and remain until emergency personnel arrive', 'Leave the home and call the agency when you reach your car'], answer: 2, explanation: 'Call 911, preserve the scene, notify Metro, and remain on scene until emergency personnel arrive. Do not disturb the scene.' }
+    ]
+  },
+
+  // ── INFECTION CONTROL ────────────────────────────────────
+  {
+    id: 'infection_control',
+    track: ['newhire', 'annual'],
+    icon: '🧤',
+    title: 'Infection Control',
+    desc: 'Hand hygiene, PPE, transmission-based precautions, immunizations, and home health-specific infection risks.',
+    passScore: 80,
+    slides: [
+      { title: 'Why Infection Control Matters in Home Health', content: `<p>Home health clinicians move between multiple patient homes each day — making you a potential vector for spreading infection if proper controls are not followed. Unlike a hospital, you have no infection control department checking compliance. You are the last line of defense.</p><div class="callout">Healthcare-associated infections (HAIs) cause an estimated 99,000 deaths annually in the United States. Home health clinicians play a critical role in prevention.</div><p>Infection control has two goals:</p><ul><li><strong>Protect your patients</strong> — from organisms you may inadvertently bring into their home</li><li><strong>Protect yourself</strong> — from exposure to infectious agents in the patient's environment</li></ul>` },
+      { title: 'Hand Hygiene — The Single Most Important Intervention', content: `<p>Proper hand hygiene is the most effective measure to prevent spread of infection.</p><p><strong>Use soap and water (minimum 20 seconds) when:</strong></p><ul><li>Hands are visibly soiled or contaminated</li><li>After contact with a patient with known or suspected C. difficile — hand sanitizer is NOT effective against C. diff spores</li><li>After using the restroom</li><li>Before eating</li></ul><p><strong>Use alcohol-based hand sanitizer (≥60% alcohol) when hands are not visibly soiled:</strong></p><ul><li>Before entering the patient's home</li><li>Before and after direct patient contact</li><li>Before and after glove use</li><li>After contact with patient's environment or equipment</li><li>Before leaving the patient's home</li></ul>` },
+      { title: 'Proper Hand Washing Technique', content: `<p>Follow these steps every time:</p><ol><li>Wet hands with clean running water</li><li>Apply enough soap to cover all surfaces</li><li>Lather and scrub all surfaces — backs of hands, between fingers, under nails — for at least <strong>20 seconds</strong></li><li>Rinse thoroughly under running water</li><li>Dry with a clean paper towel</li><li>Use the paper towel to turn off the faucet</li></ol><div class="callout warn">Keep fingernails short and clean. Artificial nails and nail polish harbor significantly more bacteria and are not recommended for clinical staff.</div>` },
+      { title: 'Glove Use — When, How, and Common Mistakes', content: `<p>Gloves protect both you and your patient — but only when used correctly. Gloves are <strong>not a substitute for hand hygiene.</strong></p><p><strong>When to wear gloves:</strong></p><ul><li>Any anticipated contact with blood, body fluids, wound drainage, or mucous membranes</li><li>When handling soiled dressings, linens, or contaminated equipment</li><li>When the patient has a known transmissible infection requiring contact precautions</li></ul><p><strong>Common mistakes:</strong></p><ul><li>Touching clean surfaces while wearing contaminated gloves</li><li>Reusing disposable gloves</li><li>Failing to perform hand hygiene after glove removal</li><li>Removing gloves by grabbing the outer surface — always peel from the wrist inward</li></ul>` },
+      { title: 'Transmission-Based Precautions', content: `<p>When a patient has a known or suspected transmissible infection, additional precautions are added on top of standard precautions.</p><p><strong>Contact Precautions</strong> (MRSA, C. diff, VRE):</p><ul><li>Gown and gloves for all patient contact</li><li>Dedicate equipment to that patient when possible</li><li>Disinfect any shared equipment before and after use</li></ul><p><strong>Droplet Precautions</strong> (influenza, pertussis, meningitis):</p><ul><li>Surgical mask within 3 feet of the patient</li></ul><p><strong>Airborne Precautions</strong> (tuberculosis, measles, varicella):</p><ul><li>N95 respirator — must be fit-tested annually</li><li>Ensure adequate ventilation</li></ul>` },
+      { title: 'MRSA and Multi-Drug Resistant Organisms', content: `<p>MRSA and other MDROs are increasingly common in home health patients. Many carry MRSA without symptoms.</p><ul><li>MRSA is spread primarily through direct contact — hands are the most common route</li><li>Contact precautions are required when MRSA is known</li><li>Standard precautions with rigorous hand hygiene protect against unrecognized MRSA</li></ul><p><strong>Your clinical bag:</strong></p><ul><li>Keep your bag off the floor at all times — use a hook or clean surface</li><li>Disinfect the outside of your bag weekly and any time it contacts a contaminated surface</li><li>Do not share equipment between patients without proper disinfection</li><li>Keep clean and dirty supplies separated</li></ul>` },
+      { title: 'C. Difficile — Special Considerations', content: `<p>C. difficile (C. diff) produces spores that are resistant to alcohol-based hand sanitizers — soap and water is required.</p><p><strong>Signs a patient may have C. diff:</strong></p><ul><li>Recent antibiotic use (within the past 2-3 months)</li><li>Frequent watery, foul-smelling diarrhea</li><li>Recent hospitalization</li></ul><p><strong>C. diff precautions:</strong></p><ul><li>Use soap and water hand hygiene — not hand sanitizer — after any patient contact</li><li>Gown and gloves for all patient contact</li><li>Disinfect equipment with a sporicidal agent (bleach-based disinfectant)</li></ul><div class="callout danger">Hand sanitizer does NOT kill C. diff spores. Soap and water is mandatory.</div>` },
+      { title: 'Wound Care Infection Control', content: `<p>Wound care is a high-risk activity for infection transmission.</p><p><strong>Before wound care:</strong></p><ul><li>Assemble all supplies before opening the wound</li><li>Create a clean field on a stable surface using a clean barrier</li><li>Perform hand hygiene and don gloves</li></ul><p><strong>During wound care:</strong></p><ul><li>Remove soiled dressings with one gloved hand</li><li>Change gloves before applying new dressings</li><li>Use aseptic technique for wounds with exposed tissue or hardware</li></ul><p><strong>After wound care:</strong></p><ul><li>Dispose of soiled dressings in a sealed bag before placing in patient's trash</li><li>Remove gloves — perform hand hygiene immediately</li><li>Disinfect any reusable equipment</li></ul>` },
+      { title: 'Equipment Cleaning and Disinfection', content: `<p>Your clinical equipment moves from home to home and can transmit pathogens if not properly disinfected.</p><p><strong>After every patient visit:</strong></p><ul><li>Wipe stethoscope diaphragm and earpieces with 70% isopropyl alcohol</li><li>Wipe blood pressure cuff with an approved disinfectant wipe (allow full contact time per label)</li><li>Wipe pulse oximeter probe with alcohol wipe</li></ul><p><strong>Weekly:</strong></p><ul><li>Disinfect interior and exterior of your clinical bag</li><li>Inspect and restock supplies — check expiration dates</li></ul><div class="callout warn">Disinfectant wipes require dwell time — the surface must remain visibly wet for the contact time listed on the product (typically 1-3 minutes). Wiping and immediately drying does not disinfect.</div>` },
+      { title: 'Immunization Requirements', content: `<p><strong>Required annually:</strong></p><ul><li><strong>TB Screening:</strong> Annual tuberculin skin test or IGRA blood test</li><li><strong>Influenza vaccine:</strong> Strongly recommended; some agency partners require it. Declination form required if refused</li></ul><p><strong>Required at hire / on file:</strong></p><ul><li><strong>Hepatitis B:</strong> 3-dose series or documented immunity — offered by Metro within 10 days of hire</li><li><strong>MMR:</strong> 2 doses or documented immunity</li><li><strong>Varicella:</strong> 2 doses or documented immunity or history of disease</li><li><strong>Tdap:</strong> One-time dose; Td booster every 10 years</li><li><strong>COVID-19:</strong> Follow current CMS and agency partner requirements</li></ul><p>Submit documentation to Metro admin. Outdated records can affect your placement eligibility.</p>` },
+      { title: 'When to Stay Home', content: `<p>Visiting patients when you are ill can have serious consequences for medically fragile patients.</p><p><strong>Do not report for visits if you have:</strong></p><ul><li>Fever (≥100.4°F) — stay home until fever-free for 24 hours without fever-reducing medication</li><li>Active vomiting or diarrhea — stay home until symptom-free for 24 hours</li><li>Confirmed or suspected influenza, COVID-19, strep, or other communicable illness</li><li>Active shingles with lesions that cannot be fully covered</li><li>Conjunctivitis — until treatment has been started for 24 hours</li></ul><div class="callout">Notify Metro as soon as possible when you cannot work due to illness so visits can be reassigned. Protecting patients is the priority.</div>` }
+    ],
+    quiz: [
+      { q: 'After caring for a patient with confirmed C. difficile, hand hygiene should be performed using:', options: ['Alcohol-based hand sanitizer — it is faster and equally effective', 'Either soap and water or hand sanitizer — both are effective', 'Soap and water only — hand sanitizer does not kill C. diff spores', 'Antimicrobial soap only — regular soap is insufficient'], answer: 2, explanation: 'C. difficile produces spores that are resistant to alcohol-based hand sanitizers. Soap and water is the only effective hand hygiene method after C. diff contact.' },
+      { q: 'You are about to apply a new wound dressing. After removing the soiled dressing with gloves, you should:', options: ['Apply the new dressing with the same gloves to maintain efficiency', 'Change gloves and perform hand hygiene before applying the new dressing', 'Remove gloves, wash hands, then use bare hands to apply the new dressing', 'Continue with the same gloves as long as they are not visibly contaminated'], answer: 1, explanation: 'The outer surface of a soiled dressing is contaminated. Change gloves and perform hand hygiene between removing the soiled dressing and applying the new one.' },
+      { q: 'Your stethoscope should be disinfected:', options: ['Weekly during your clinical bag cleanup', 'Monthly or when visibly soiled', 'After every patient visit', 'Only after visiting a patient on contact precautions'], answer: 2, explanation: 'Stethoscopes and all patient care equipment should be disinfected after every patient visit — not just after high-risk visits.' },
+      { q: 'A patient you visited yesterday has just been diagnosed with influenza. You feel fine today. You should:', options: ['Continue your schedule — you feel fine so you are not contagious', 'Complete your schedule but wear a mask at all visits', 'Contact Metro — you may need to wear a mask and monitor for symptoms per current guidance', 'Cancel all visits immediately regardless of symptoms'], answer: 2, explanation: 'Contact Metro when you have had a known exposure. Whether you continue working depends on current guidelines and your vaccination status — do not make this decision alone.' },
+      { q: 'When using a disinfectant wipe on your blood pressure cuff, the correct technique is:', options: ['Wipe the surface and allow it to air dry immediately', 'Keep the surface visibly wet for the full dwell time listed on the product label', 'Wipe twice in quick succession for extra protection', 'Only wipe the parts that directly touched the patient\'s skin'], answer: 1, explanation: 'Disinfectants require contact time (dwell time) to be effective — typically 1-3 minutes. The surface must remain visibly wet for the full contact time. Immediately drying does not achieve disinfection.' },
+      { q: 'Which immunization does OSHA require employers to offer to clinical staff within 10 days of hire?', options: ['Influenza vaccine', 'COVID-19 vaccine', 'Hepatitis B vaccine series', 'Tdap booster'], answer: 2, explanation: 'OSHA\'s Bloodborne Pathogens Standard requires employers to offer the Hepatitis B vaccination series free of charge within 10 working days of initial assignment.' }
+    ]
+  },
+
+  // ── NEW HIRE ONLY ─────────────────────────────────────────
   {
     id: 'nh_clinical',
     track: ['newhire'],
@@ -699,46 +979,12 @@ const MODULES = [
     title: 'Clinical Standards & Field Practice',
     desc: 'Metro\'s documentation requirements, scheduling expectations, and professional conduct.',
     slides: [
-      {
-        title: 'Metro\'s Clinical Model',
-        content: `<p>Metro Mobile Health Care places clinicians with partner home health agencies. Your clinical decisions are yours — Metro does not direct clinical care. We do require adherence to the following standards across all placements:</p>
-        <ul>
-          <li>Complete documentation within the agency's required timeframe (typically same-day or within 24 hours)</li>
-          <li>Contact Metro and the agency scheduler for any visit that cannot be completed as scheduled</li>
-          <li>Notify Metro if a patient is hospitalized, declines services, or has a significant change in condition</li>
-          <li>Never schedule or cancel visits directly with patients without agency coordinator awareness</li>
-        </ul>`
-      },
-      {
-        title: 'Evaluation & SOC Documentation',
-        content: `<p>Evals and Start of Care visits are Metro's highest-value and highest-scrutiny service. Requirements:</p>
-        <ul>
-          <li>Complete the full OASIS or agency-required assessment at SOC</li>
-          <li>Document functional status, home environment, fall risk, and rehab potential</li>
-          <li>Establish measurable, patient-centered goals in every plan of care</li>
-          <li>Submit documentation before leaving the patient's home when possible</li>
-        </ul>
-        <div class="callout">Use the Metro documentation tool at tools.metromobilehc.com for SOC/eval voice-to-note drafting. Initials and date are required before submitting to the agency EMR.</div>`
-      },
-      {
-        title: 'Communication & Professionalism',
-        content: `<p>You represent Metro Mobile Health Care at every patient home and agency interaction.</p>
-        <ul>
-          <li>Respond to Metro and agency communications within <strong>2 hours</strong> during the workday</li>
-          <li>Dress professionally — Metro polo preferred, or business casual at minimum</li>
-          <li>Introduce yourself as a Metro Mobile clinician placed with [agency name]</li>
-          <li>Never discuss Metro's billing rates, contract terms, or business matters with agency staff or patients</li>
-          <li>Concerns about agency conduct should be directed to Stephen or Evan, not escalated at the agency level</li>
-        </ul>`
-      }
+      { title: 'Metro\'s Clinical Model', content: `<p>Metro Mobile Health Care places clinicians with partner home health agencies. Your clinical decisions are yours — Metro does not direct clinical care. We do require adherence to the following standards across all placements:</p><ul><li>Complete documentation within the agency's required timeframe (typically same-day or within 24 hours)</li><li>Contact Metro and the agency scheduler for any visit that cannot be completed as scheduled</li><li>Notify Metro if a patient is hospitalized, declines services, or has a significant change in condition</li><li>Never schedule or cancel visits directly with patients without agency coordinator awareness</li></ul>` },
+      { title: 'Evaluation & SOC Documentation', content: `<p>Evals and Start of Care visits are Metro's highest-value and highest-scrutiny service. Requirements:</p><ul><li>Complete the full OASIS or agency-required assessment at SOC</li><li>Document functional status, home environment, fall risk, and rehab potential</li><li>Establish measurable, patient-centered goals in every plan of care</li><li>Submit documentation before leaving the patient's home when possible</li></ul><div class="callout">Use the Metro documentation tool at tools.metromobilehc.com for SOC/eval voice-to-note drafting. Initials and date are required before submitting to the agency EMR.</div>` },
+      { title: 'Communication & Professionalism', content: `<p>You represent Metro Mobile Health Care at every patient home and agency interaction.</p><ul><li>Respond to Metro and agency communications within <strong>2 hours</strong> during the workday</li><li>Dress professionally — Metro polo preferred, or business casual at minimum</li><li>Introduce yourself as a Metro Mobile clinician placed with [agency name]</li><li>Never discuss Metro's billing rates, contract terms, or business matters with agency staff or patients</li><li>Concerns about agency conduct should be directed to Stephen or Evan, not escalated at the agency level</li></ul>` }
     ],
     quiz: [
-      {
-        q: 'A patient calls you directly to reschedule their visit. You should:',
-        options: ['Reschedule and update ConnectTeam', 'Advise the patient to contact their agency coordinator, then notify Metro', 'Tell the patient to call the agency and take no further action', 'Reschedule and let the agency know at your next visit'],
-        answer: 1,
-        explanation: 'Visit scheduling should go through the agency coordinator. Inform Metro as well so the eval tool and scheduling records stay accurate.'
-      }
+      { q: 'A patient calls you directly to reschedule their visit. You should:', options: ['Reschedule and update ConnectTeam', 'Advise the patient to contact their agency coordinator, then notify Metro', 'Tell the patient to call the agency and take no further action', 'Reschedule and let the agency know at your next visit'], answer: 1, explanation: 'Visit scheduling should go through the agency coordinator. Inform Metro as well so the eval tool and scheduling records stay accurate.' }
     ]
   },
 
@@ -749,212 +995,11 @@ const MODULES = [
     title: 'Samsung Galaxy Tab & ConnectTeam',
     desc: 'Device policy, Knox MDM, ConnectTeam scheduling, and acceptable use.',
     slides: [
-      {
-        title: 'Your Metro Tablet',
-        content: `<p>Metro issues a Samsung Galaxy Tab managed by Knox MDM (Mobile Device Management). Key things to know:</p>
-        <ul>
-          <li>The tablet is Metro property — it may be remotely wiped if lost, stolen, or at end of employment</li>
-          <li>Knox MDM may restrict installation of non-approved apps</li>
-          <li>Do not share your tablet with family members or other clinicians</li>
-          <li>Keep the tablet charged and accessible during scheduled work hours</li>
-          <li>Return the tablet and all accessories upon separation from Metro</li>
-        </ul>`
-      },
-      {
-        title: 'ConnectTeam: Your Scheduling Hub',
-        content: `<p>ConnectTeam is Metro's primary communication and scheduling platform. Use it to:</p>
-        <ul>
-          <li>View your assigned visits and confirm or flag scheduling conflicts</li>
-          <li>Log mileage for each visit (required for reimbursement)</li>
-          <li>Complete Metro checklist items and training attestations</li>
-          <li>Communicate with Metro admin (not for PHI)</li>
-        </ul>
-        <div class="callout warn">Do not log patient names, diagnosis codes, or clinical information in ConnectTeam chats or job notes — use the agency EMR for all clinical documentation.</div>`
-      }
+      { title: 'Your Metro Tablet', content: `<p>Metro issues a Samsung Galaxy Tab managed by Knox MDM (Mobile Device Management). Key things to know:</p><ul><li>The tablet is Metro property — it may be remotely wiped if lost, stolen, or at end of employment</li><li>Knox MDM may restrict installation of non-approved apps</li><li>Do not share your tablet with family members or other clinicians</li><li>Keep the tablet charged and accessible during scheduled work hours</li><li>Return the tablet and all accessories upon separation from Metro</li></ul>` },
+      { title: 'ConnectTeam: Your Scheduling Hub', content: `<p>ConnectTeam is Metro's primary communication and scheduling platform. Use it to:</p><ul><li>View your assigned visits and confirm or flag scheduling conflicts</li><li>Log mileage for each visit (required for reimbursement)</li><li>Complete Metro checklist items and training attestations</li><li>Communicate with Metro admin (not for PHI)</li></ul><div class="callout warn">Do not log patient names, diagnosis codes, or clinical information in ConnectTeam chats or job notes — use the agency EMR for all clinical documentation.</div>` }
     ],
     quiz: [
-      {
-        q: 'Your Metro tablet is lost during a patient visit. What do you do?',
-        options: ['Report it to Metro within 24 hours', 'Purchase a replacement before reporting', 'Report it to Metro immediately — same day', 'File a police report and then inform Metro within the week'],
-        answer: 2,
-        explanation: 'Lost devices must be reported immediately so Metro can initiate a remote wipe via Knox MDM and assess for potential HIPAA breach.'
-      }
-    ]
-  },
-
-  // ── ANNUAL ────────────────────────────────────────────────
-  {
-    id: 'ann_hipaa',
-    track: ['annual'],
-    icon: '🔐',
-    title: 'HIPAA Annual Refresher',
-    desc: 'Annual review of PHI handling, patient rights, and breach obligations.',
-    slides: [
-      {
-        title: 'HIPAA — Annual Review',
-        content: `<p>CMS requires annual HIPAA training for all staff who handle PHI. This refresher covers updates and common compliance failures seen across home health settings.</p>
-        <div class="callout">Patient rights under HIPAA include: the right to access their records, request amendments, receive an accounting of disclosures, and file a complaint without retaliation.</div>
-        <p>Common violations Metro clinicians should guard against:</p>
-        <ul>
-          <li>Discussing patients in public settings (restaurants, school pickups, social media)</li>
-          <li>Using personal email to send clinical documentation to agencies</li>
-          <li>Photographing wound sites without documented patient authorization</li>
-          <li>Accessing records of patients not on your active caseload</li>
-        </ul>`
-      },
-      {
-        title: 'Social Media & Electronic Communications',
-        content: `<p>Social media is one of the fastest-growing sources of HIPAA violations in home health.</p>
-        <ul>
-          <li><strong>Never post</strong> any information about a patient, including non-identifying details that could enable identification in context</li>
-          <li>Do not share "feel good" stories about patient progress without a signed HIPAA-compliant authorization</li>
-          <li>Group chats among clinicians (even informal) must not contain PHI</li>
-          <li>Text messages are not HIPAA-compliant for clinical information — use agency EMR secure messaging</li>
-        </ul>`
-      }
-    ],
-    quiz: [
-      {
-        q: 'A clinician posts on Facebook: "So proud of my patient in Broken Arrow who took her first steps today!" This is:',
-        options: ['Acceptable because no name was used', 'A potential HIPAA violation because it could enable identification', 'Acceptable with the patient\'s verbal consent', 'Fine if the patient\'s face is not shown'],
-        answer: 1,
-        explanation: 'Location + condition + context can enable identification even without a name. This is a reportable HIPAA violation.'
-      }
-    ]
-  },
-
-  {
-    id: 'ann_abuse',
-    track: ['annual'],
-    icon: '🛡️',
-    title: 'Abuse, Neglect & Exploitation',
-    desc: 'Mandatory reporter obligations, recognition, and reporting protocols.',
-    slides: [
-      {
-        title: 'Mandatory Reporter Status',
-        content: `<p>As a licensed clinician in Oklahoma, you are a mandatory reporter of suspected abuse, neglect, or exploitation of:</p>
-        <ul>
-          <li>Adults 65 and older</li>
-          <li>Adults with physical or developmental disabilities</li>
-          <li>Children (under 18) in any household you enter</li>
-        </ul>
-        <p>Mandatory reporting is not optional. You are required by law to report reasonable suspicion — you do not need to prove abuse has occurred.</p>
-        <div class="callout danger">Failure to report is a criminal offense in Oklahoma. Good-faith reports are protected from civil liability even if the report turns out to be unfounded.</div>`
-      },
-      {
-        title: 'Signs of Abuse & Neglect',
-        content: `<p>Common indicators to document and report:</p>
-        <ul>
-          <li><strong>Physical abuse:</strong> unexplained bruising, injuries inconsistent with explanation, burns, welts</li>
-          <li><strong>Neglect:</strong> malnutrition, dehydration, poor hygiene, unsafe home conditions, untreated medical conditions</li>
-          <li><strong>Financial exploitation:</strong> sudden changes in financial situation, unpaid bills, new persons controlling finances</li>
-          <li><strong>Emotional abuse:</strong> patient appears fearful of caregiver, caregiver is controlling, patient is isolated</li>
-        </ul>`
-      },
-      {
-        title: 'How to Report in Oklahoma',
-        content: `<p><strong>Oklahoma Adult Protective Services:</strong> 1-800-522-3511 (24/7)</p>
-        <p><strong>Oklahoma DHS Child Abuse Hotline:</strong> 1-800-522-3511</p>
-        <p>Steps after identifying a concern:</p>
-        <ol>
-          <li>Ensure immediate safety — if in danger, call 911</li>
-          <li>Contact Metro leadership (Stephen or Evan) to notify of the situation</li>
-          <li>Make the APS or DHS report — you can do this; you do not need Metro's permission</li>
-          <li>Document your clinical observations in detail in the agency EMR</li>
-          <li>Do not confront the suspected abuser</li>
-        </ol>`
-      }
-    ],
-    quiz: [
-      {
-        q: 'You notice an elderly patient has multiple unexplained bruises during your visit. The patient becomes anxious when their adult child enters the room. You should:',
-        options: ['Document your observations and wait to see if it happens again', 'Ask the adult child directly about the bruises', 'Report your concerns to APS and notify Metro leadership', 'Complete your visit and mention it to the agency on your next call'],
-        answer: 2,
-        explanation: 'You are a mandatory reporter. Reasonable suspicion requires reporting — you do not need certainty. Report to APS and inform Metro leadership.'
-      }
-    ]
-  },
-
-  {
-    id: 'ann_emergency',
-    track: ['annual'],
-    icon: '🚨',
-    title: 'Emergency Procedures',
-    desc: 'Patient emergencies, severe weather, and critical incident protocols.',
-    slides: [
-      {
-        title: 'Medical Emergencies During a Visit',
-        content: `<p>If a patient experiences a medical emergency during your home visit:</p>
-        <ol>
-          <li><strong>Call 911 immediately</strong> — do not delay for any administrative step</li>
-          <li>Provide basic life support within your licensure scope if trained and appropriate</li>
-          <li>Stay with the patient until EMS arrives</li>
-          <li>Notify the agency and Metro leadership as soon as possible</li>
-          <li>Document the event in detail including time, patient status, interventions, and EMS arrival</li>
-        </ol>
-        <div class="callout danger">Do not transport a patient in your personal vehicle under any circumstances.</div>`
-      },
-      {
-        title: 'Severe Weather',
-        content: `<p>Oklahoma weather can change rapidly. If severe weather threatens during a visit:</p>
-        <ul>
-          <li>Do not begin driving if a tornado warning is active for your location</li>
-          <li>Shelter with the patient if necessary — interior room, lowest floor, away from windows</li>
-          <li>Notify Metro when safe to do so</li>
-          <li>Do not attempt to reach a patient if roads are flooded or conditions are unsafe</li>
-        </ul>
-        <p>Metro will not penalize clinicians for safety-related visit delays or cancellations due to severe weather.</p>`
-      }
-    ],
-    quiz: [
-      {
-        q: 'A patient becomes unresponsive during your visit. Your first action is:',
-        options: ['Call Metro to report the incident', 'Call the patient\'s emergency contact', 'Call 911', 'Attempt to contact the agency scheduler'],
-        answer: 2,
-        explanation: 'A 911 call is always the first action in a life-threatening emergency. All other notifications come after.'
-      }
-    ]
-  },
-
-  {
-    id: 'ann_infection',
-    track: ['annual'],
-    icon: '🧤',
-    title: 'Infection Control Annual',
-    desc: 'Hand hygiene, PPE, TB, influenza, and current infection control protocols.',
-    slides: [
-      {
-        title: 'Hand Hygiene: The #1 Intervention',
-        content: `<p>Proper hand hygiene prevents more healthcare-associated infections than any other single measure.</p>
-        <p>Wash with soap and water for at least 20 seconds — or use hand sanitizer with at least 60% alcohol — in these situations:</p>
-        <ul>
-          <li>Before entering and after leaving any patient home</li>
-          <li>Before and after direct patient contact</li>
-          <li>Before and after handling any wound dressings or medical equipment</li>
-          <li>After removing gloves</li>
-          <li>After contact with body fluids or potentially contaminated surfaces</li>
-        </ul>
-        <div class="callout">Hand sanitizer is not a substitute for soap and water when hands are visibly soiled or after contact with C. difficile.</div>`
-      },
-      {
-        title: 'Annual Health Requirements',
-        content: `<p>Metro staff are required to maintain documentation of the following:</p>
-        <ul>
-          <li><strong>TB screening:</strong> Annual TB test or symptom questionnaire if prior positive test</li>
-          <li><strong>Influenza vaccine:</strong> Recommended annually; declination form accepted if declined</li>
-          <li><strong>COVID-19:</strong> Follow current CDC and CMS guidance — requirements vary by agency partner</li>
-          <li><strong>Hepatitis B:</strong> Series recommended for clinical staff with blood exposure risk</li>
-        </ul>
-        <p>Submit updated immunization documentation to Metro admin each credentialing renewal cycle.</p>`
-      }
-    ],
-    quiz: [
-      {
-        q: 'After removing gloves during a wound care visit, you should:',
-        options: ['Proceed to the next task — gloves provided full protection', 'Perform hand hygiene before touching anything else', 'Use hand sanitizer only if hands are visibly soiled', 'Wash hands when you return to your vehicle'],
-        answer: 1,
-        explanation: 'Gloves are not a substitute for hand hygiene. Perform hand hygiene immediately after glove removal.'
-      }
+      { q: 'Your Metro tablet is lost during a patient visit. What do you do?', options: ['Report it to Metro within 24 hours', 'Purchase a replacement before reporting', 'Report it to Metro immediately — same day', 'File a police report and then inform Metro within the week'], answer: 2, explanation: 'Lost devices must be reported immediately so Metro can initiate a remote wipe via Knox MDM and assess for potential HIPAA breach.' }
     ]
   }
 
@@ -1236,14 +1281,15 @@ function submitQuiz() {
   });
 
   const score = Math.round((correct / qs.length) * 100);
-  const passed = score >= 70;
+  const passThreshold = currentModule.passScore || 70;
+  const passed = score >= passThreshold;
 
   document.getElementById('quizWrap').insertAdjacentHTML('afterend', `
     <div class="quiz-result" style="margin-top:20px;">
       <div class="score">${score}%</div>
       <div class="score-label">${correct} of ${qs.length} correct</div>
       <div class="pass-msg ${passed ? 'pass' : 'fail'}">
-        ${passed ? '✓ Passed — please sign below to complete this module.' : '✗ Score below 70% — please review the slides and retake.'}
+        ${passed ? '✓ Passed — please sign below to complete this module.' : `✗ Score below ${passThreshold}% — please review the slides and retake.`}
       </div>
     </div>
     ${passed ? renderAttestation(score) : `<div style="margin-top:20px;text-align:center;"><button class="nav-btn prev" onclick="openModule('${currentModule.id}')">↺ Retake Module</button></div>`}
