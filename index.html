@@ -526,6 +526,7 @@
             <option value="annual">Annual</option>
           </select>
           <button class="export-btn" onclick="exportCSV()">⬇ Export CSV</button>
+          <button class="export-btn" onclick="annualReset()" style="border-color:#f08080;color:#f08080;">🔄 Annual Reset</button>
         </div>
         <div class="admin-table-wrap">
           <table id="adminTable">
@@ -1315,6 +1316,8 @@ function goBack() {
 }
 
 function renderSlide() {
+  const prevSpeed = document.getElementById('speechSpeed');
+  if (prevSpeed) speechRate = parseFloat(prevSpeed.value);
   stopSpeech();
   const total = currentModule.slides.length + 1; // +1 for quiz
   const fill = Math.round((currentSlide / total) * 100);
@@ -1327,6 +1330,14 @@ function renderSlide() {
     body.innerHTML = `
       <div class="listen-bar">
         <button class="listen-btn" id="listenBtn" onclick="toggleListen()">🔊 Listen</button>
+        <select id="speechSpeed" onchange="onSpeedChange()" style="padding:5px 8px;border-radius:7px;border:1px solid rgba(42,143,160,.4);background:#fff;color:var(--navy);font-size:12px;font-weight:600;cursor:pointer;">
+          <option value="0.75">0.75×</option>
+          <option value="0.92" selected>1×</option>
+          <option value="1.2">1.25×</option>
+          <option value="1.5">1.5×</option>
+          <option value="1.75">1.75×</option>
+          <option value="2.0">2×</option>
+        </select>
         <span class="listen-label" id="listenLabel">Tap to hear this slide read aloud</span>
         <div class="listen-progress" id="listenProgress"><div class="listen-progress-fill" id="listenProgressFill"></div></div>
       </div>
@@ -1355,6 +1366,7 @@ function goSlide(dir) {
 let speechUtterance = null;
 let speechPlaying = false;
 let progressTimer = null;
+let speechRate = 0.92;
 
 function getSlideText() {
   const slide = currentModule.slides[currentSlide];
@@ -1429,7 +1441,7 @@ function startSpeech() {
 
   const text = getSlideText();
   speechUtterance = new SpeechSynthesisUtterance(text);
-  speechUtterance.rate = 0.92;
+  speechUtterance.rate = speechRate;
   speechUtterance.pitch = 1.0;
   speechUtterance.volume = 1.0;
 
@@ -1461,7 +1473,7 @@ function startSpeech() {
 function animateProgress(textLen) {
   // Estimate duration: ~140 words/min at rate 0.92 → adjust per char count
   const words = textLen / 5;
-  const durationMs = (words / 140) * 60000 / 0.92;
+  const durationMs = (words / 140) * 60000 / speechRate;
   const fill = document.getElementById('listenProgressFill');
   if (!fill) return;
   fill.style.transition = 'none';
@@ -1489,6 +1501,16 @@ function stopSpeech() {
   if (window.speechSynthesis) window.speechSynthesis.cancel();
   speechPlaying = false;
   clearInterval(progressTimer);
+}
+
+function onSpeedChange() {
+  const sel = document.getElementById('speechSpeed');
+  if (sel) speechRate = parseFloat(sel.value);
+  // If currently playing, restart at new speed
+  if (speechPlaying) {
+    stopSpeech();
+    setTimeout(startSpeech, 100);
+  }
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -1525,6 +1547,7 @@ async function loadStaffTable() {
             : `<button onclick="setStaffActive('${s.id}', true)" style="padding:4px 10px;font-size:11px;font-weight:600;border-radius:6px;border:1px solid #5de0a0;background:transparent;color:#5de0a0;cursor:pointer;">Reactivate</button>`
           }
           <button onclick="changeRole('${s.id}','${s.role}')" style="padding:4px 10px;font-size:11px;font-weight:600;border-radius:6px;border:1px solid var(--gold);background:transparent;color:var(--gold);cursor:pointer;">${s.role === 'admin' ? '→ Clinician' : '→ Admin'}</button>
+          <button onclick="deleteStaff('${s.id}','${s.full_name.replace(/'/g,"\\'")}')" style="padding:4px 10px;font-size:11px;font-weight:600;border-radius:6px;border:1px solid #f08080;background:rgba(240,128,128,.1);color:#f08080;cursor:pointer;">Delete</button>
         </td>
       </tr>`).join('');
   } catch(e) { console.error('loadStaffTable error:', e); }
@@ -1592,6 +1615,30 @@ async function changeRole(id, currentRole) {
     loadStaffTable();
     await loadStaffList();
   } catch(e) { toast('Error updating role'); }
+}
+
+async function deleteStaff(id, name) {
+  if (!confirm(`Permanently delete ${name}?\n\nThis removes them from the staff list but keeps their training completion records.`)) return;
+  try {
+    const { error } = await sb.from('compliance_staff').delete().eq('id', id);
+    if (error) throw error;
+    toast(`✓ ${name} deleted`);
+    loadStaffTable();
+    await loadStaffList();
+  } catch(e) { toast('Error deleting staff member: ' + e.message); }
+}
+
+async function annualReset() {
+  const year = new Date().getFullYear();
+  if (!confirm(`Reset ALL annual compliance completions?\n\nThis will clear every employee\'s annual training records so everyone must redo their annual modules. New hire completions are not affected.\n\nThis action cannot be undone. Continue?`)) return;
+  try {
+    const { error } = await sb.from('compliance_completions')
+      .delete()
+      .eq('track', 'annual');
+    if (error) throw error;
+    toast('✓ Annual compliance reset — all staff must redo annual training');
+    loadAdminTable();
+  } catch(e) { toast('Error resetting annual completions: ' + e.message); }
 }
 
 // ══════════════════════════════════════════════════════════════
