@@ -1333,7 +1333,7 @@ function renderDash() {
     return `<div class="module-card ${comp ? 'completed' : ''}" onclick="openModule('${m.id}')">
       <div class="module-icon">${m.icon}</div>
       <div class="module-title">${m.title}</div>
-      <div class="module-meta">${m.slides.length} slides · ${m.quiz.length} quiz question${m.quiz.length !== 1 ? 's' : ''}</div>
+      <div class="module-meta">${m.slides.length} slides · ${(m.quiz||[]).length} quiz question${(m.quiz||[]).length !== 1 ? 's' : ''}</div>
       <span class="status-badge ${badgeClass}">${badgeLabel}</span>
       ${comp ? `<div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:100%"></div></div>` : ''}
       ${comp ? `<div style="font-size:11px;color:var(--gray-400);margin-top:8px;">Score: ${comp.score}% · ${new Date(comp.completed_at).toLocaleDateString()}</div>` : ''}
