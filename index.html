@@ -413,6 +413,17 @@
     padding: 6px 18px; border-radius: 20px; letter-spacing: .4px;
   }
 
+  /* ── ADMIN TABS ── */
+  .admin-tab-btn {
+    padding: 7px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,.15);
+    background: transparent; color: rgba(255,255,255,.55);
+    font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s;
+  }
+  .admin-tab-btn.active {
+    background: var(--teal); border-color: var(--teal); color: #fff;
+  }
+  .admin-tab-btn:hover:not(.active) { border-color: var(--teal-light); color: var(--teal-light); }
+
   /* ── TOAST ── */
   #toast {
     position: fixed; bottom: 24px; right: 24px;
@@ -465,18 +476,7 @@
     <div class="form-group">
       <label>Select Your Name</label>
       <select id="nameSelect">
-        <option value="">— Choose your name —</option>
-        <option>Evan Flanagan, PT</option>
-        <option>Kimberly Quigley, PTA</option>
-        <option>Lexie Henson, PTA</option>
-        <option>Tina Pierce, PTA</option>
-        <option>Johnathan Barber, PT</option>
-        <option>Cassidy Crouch, OT</option>
-        <option>Marquita Tarkington, OT</option>
-        <option>Kym Crane, OT</option>
-        <option>Kasey Rideout, SLP</option>
-        <option>Stephen Mace, DPT</option>
-        <option>Kym Quigley (Admin)</option>
+        <option value="">— Loading staff list… —</option>
       </select>
     </div>
     <div class="form-group">
@@ -507,27 +507,79 @@
 
   <div id="adminSection" style="display:none;">
     <div class="admin-panel">
-      <h2>⚙️ Admin — Compliance Records</h2>
-      <div class="filter-row">
-        <select class="admin-select" id="adminFilterEmployee" onchange="loadAdminTable()">
-          <option value="">All Employees</option>
-        </select>
-        <select class="admin-select" id="adminFilterTrack" onchange="loadAdminTable()">
-          <option value="">All Tracks</option>
-          <option value="newhire">New Hire</option>
-          <option value="annual">Annual</option>
-        </select>
-        <button class="export-btn" onclick="exportCSV()">⬇ Export CSV</button>
+
+      <!-- Admin Tab Bar -->
+      <div style="display:flex;gap:8px;margin-bottom:20px;border-bottom:1px solid rgba(255,255,255,.1);padding-bottom:12px;">
+        <button class="admin-tab-btn active" id="tabRecords" onclick="switchAdminTab('records')">📋 Compliance Records</button>
+        <button class="admin-tab-btn" id="tabStaff" onclick="switchAdminTab('staff')">👥 Manage Staff</button>
       </div>
-      <div class="admin-table-wrap">
-        <table id="adminTable">
-          <thead><tr>
-            <th>Employee</th><th>Module</th><th>Track</th>
-            <th>Score</th><th>Signed</th><th>Completed</th>
-          </tr></thead>
-          <tbody id="adminTbody"></tbody>
-        </table>
+
+      <!-- RECORDS TAB -->
+      <div id="adminTabRecords">
+        <div class="filter-row">
+          <select class="admin-select" id="adminFilterEmployee" onchange="loadAdminTable()">
+            <option value="">All Employees</option>
+          </select>
+          <select class="admin-select" id="adminFilterTrack" onchange="loadAdminTable()">
+            <option value="">All Tracks</option>
+            <option value="newhire">New Hire</option>
+            <option value="annual">Annual</option>
+          </select>
+          <button class="export-btn" onclick="exportCSV()">⬇ Export CSV</button>
+        </div>
+        <div class="admin-table-wrap">
+          <table id="adminTable">
+            <thead><tr>
+              <th>Employee</th><th>Module</th><th>Track</th>
+              <th>Score</th><th>Signed</th><th>Completed</th>
+            </tr></thead>
+            <tbody id="adminTbody"></tbody>
+          </table>
+        </div>
       </div>
+
+      <!-- STAFF TAB -->
+      <div id="adminTabStaff" style="display:none;">
+        <div class="filter-row" style="margin-bottom:16px;">
+          <button class="export-btn" onclick="showAddStaff()" style="border-color:var(--teal-light);color:var(--teal-light);">+ Add Staff Member</button>
+        </div>
+
+        <!-- Add Staff Form -->
+        <div id="addStaffForm" style="display:none;background:rgba(255,255,255,.05);border-radius:10px;padding:18px;margin-bottom:18px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end;flex-wrap:wrap;">
+            <div>
+              <label style="color:var(--teal-light);font-size:12px;font-weight:600;display:block;margin-bottom:5px;">Full Name</label>
+              <input type="text" id="newStaffName" placeholder="Jane Smith, PT" style="width:100%;padding:8px 12px;border-radius:7px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;font-size:13px;" />
+            </div>
+            <div>
+              <label style="color:var(--teal-light);font-size:12px;font-weight:600;display:block;margin-bottom:5px;">PIN</label>
+              <input type="text" id="newStaffPin" placeholder="4-6 digits" maxlength="6" style="width:100%;padding:8px 12px;border-radius:7px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;font-size:13px;" />
+            </div>
+            <div>
+              <label style="color:var(--teal-light);font-size:12px;font-weight:600;display:block;margin-bottom:5px;">Role</label>
+              <select id="newStaffRole" style="width:100%;padding:8px 12px;border-radius:7px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;font-size:13px;">
+                <option value="clinician">Clinician</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button onclick="saveNewStaff()" style="padding:8px 16px;background:var(--teal);color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;">Save</button>
+              <button onclick="hideAddStaff()" style="padding:8px 12px;background:rgba(255,255,255,.1);color:#fff;border:none;border-radius:7px;font-size:13px;cursor:pointer;">✕</button>
+            </div>
+          </div>
+          <div id="addStaffError" style="color:#f08080;font-size:12px;margin-top:8px;display:none;"></div>
+        </div>
+
+        <div class="admin-table-wrap">
+          <table>
+            <thead><tr>
+              <th>Name</th><th>Role</th><th>Status</th><th>PIN</th><th>Actions</th>
+            </tr></thead>
+            <tbody id="staffTbody"></tbody>
+          </table>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -559,21 +611,36 @@ const SUPABASE_URL = 'https://zxserlkhwkfoqiepurdr.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4c2VybGtod2tmb3FpZXB1cmRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0NDM1NDIsImV4cCI6MjA5NjAxOTU0Mn0.cA9LJSn5t4sIbIemdQGQsdwtQFwb-6Q9xIZi48UYq34';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// Simple PIN map — in production, store hashed PINs in Supabase
-const PINS = {
-  'Evan Flanagan, PT': '1234',
-  'Kimberly Quigley, PTA': '1234',
-  'Lexie Henson, PTA': '1234',
-  'Tina Pierce, PTA': '1234',
-  'Johnathan Barber, PT': '1234',
-  'Cassidy Crouch, OT': '1234',
-  'Marquita Tarkington, OT': '1234',
-  'Kym Crane, OT': '1234',
-  'Kasey Rideout, SLP': '1234',
-  'Stephen Mace, DPT': 'admin',
-  'Kym Quigley (Admin)': 'admin',
-};
-const ADMINS = ['Stephen Mace, DPT', 'Kym Quigley (Admin)'];
+// Staff loaded dynamically from Supabase compliance_staff table
+let staffList = []; // { full_name, pin, role, active }
+
+async function loadStaffList() {
+  try {
+    const { data, error } = await sb.from('compliance_staff')
+      .select('full_name, pin, role')
+      .eq('active', true)
+      .order('full_name');
+    if (error) throw error;
+    staffList = data || [];
+  } catch(e) {
+    console.warn('Could not load staff list:', e);
+    staffList = [];
+  }
+  // Populate login dropdown
+  const sel = document.getElementById('nameSelect');
+  sel.innerHTML = '<option value="">— Choose your name —</option>';
+  staffList.forEach(s => {
+    const o = document.createElement('option');
+    o.value = s.full_name;
+    o.textContent = s.full_name;
+    sel.appendChild(o);
+  });
+}
+
+function isAdmin(name) {
+  const s = staffList.find(x => x.full_name === name);
+  return s && s.role === 'admin';
+}
 
 // ══════════════════════════════════════════════════════════════
 // MODULE LIBRARY
@@ -998,37 +1065,28 @@ const MODULES = [
       { q: 'When using a disinfectant wipe on your blood pressure cuff, the correct technique is:', options: ['Wipe the surface and allow it to air dry immediately', 'Keep the surface visibly wet for the full dwell time listed on the product label', 'Wipe twice in quick succession for extra protection', 'Only wipe the parts that directly touched the patient\'s skin'], answer: 1, explanation: 'Disinfectants require contact time (dwell time) to be effective — typically 1-3 minutes. The surface must remain visibly wet for the full contact time. Immediately drying does not achieve disinfection.' },
       { q: 'Which immunization does OSHA require employers to offer to clinical staff within 10 days of hire?', options: ['Influenza vaccine', 'COVID-19 vaccine', 'Hepatitis B vaccine series', 'Tdap booster'], answer: 2, explanation: 'OSHA\'s Bloodborne Pathogens Standard requires employers to offer the Hepatitis B vaccination series free of charge within 10 working days of initial assignment.' }
     ]
-  },
+  },,
 
-  // ── NEW HIRE ONLY ─────────────────────────────────────────
-  {
-    id: 'nh_clinical',
-    track: ['newhire'],
-    icon: '🩺',
-    title: 'Clinical Standards & Field Practice',
-    desc: 'Metro\'s documentation requirements, scheduling expectations, and professional conduct.',
-    slides: [
-      { title: 'Metro\'s Clinical Model', content: `<p>Metro Mobile Health Care places clinicians with partner home health agencies. Your clinical decisions are yours — Metro does not direct clinical care. We do require adherence to the following standards across all placements:</p><ul><li>Complete documentation within the agency's required timeframe (typically same-day or within 24 hours)</li><li>Contact Metro and the agency scheduler for any visit that cannot be completed as scheduled</li><li>Notify Metro if a patient is hospitalized, declines services, or has a significant change in condition</li><li>Never schedule or cancel visits directly with patients without agency coordinator awareness</li></ul>` },
-      { title: 'Evaluation & SOC Documentation', content: `<p>Evals and Start of Care visits are Metro's highest-value and highest-scrutiny service. Requirements:</p><ul><li>Complete the full OASIS or agency-required assessment at SOC</li><li>Document functional status, home environment, fall risk, and rehab potential</li><li>Establish measurable, patient-centered goals in every plan of care</li><li>Submit documentation before leaving the patient's home when possible</li></ul><div class="callout">Use the Metro documentation tool at tools.metromobilehc.com for SOC/eval voice-to-note drafting. Initials and date are required before submitting to the agency EMR.</div>` },
-      { title: 'Communication & Professionalism', content: `<p>You represent Metro Mobile Health Care at every patient home and agency interaction.</p><ul><li>Respond to Metro and agency communications within <strong>2 hours</strong> during the workday</li><li>Dress professionally — Metro polo preferred, or business casual at minimum</li><li>Introduce yourself as a Metro Mobile clinician placed with [agency name]</li><li>Never discuss Metro's billing rates, contract terms, or business matters with agency staff or patients</li><li>Concerns about agency conduct should be directed to Stephen or Evan, not escalated at the agency level</li></ul>` }
-    ],
-    quiz: [
-      { q: 'A patient calls you directly to reschedule their visit. You should:', options: ['Reschedule and update ConnectTeam', 'Advise the patient to contact their agency coordinator, then notify Metro', 'Tell the patient to call the agency and take no further action', 'Reschedule and let the agency know at your next visit'], answer: 1, explanation: 'Visit scheduling should go through the agency coordinator. Inform Metro as well so the eval tool and scheduling records stay accurate.' }
-    ]
-  },
-
+  // ── DEVICE & COMMUNICATION COMPLIANCE ────────────────────
   {
     id: 'nh_tablet',
-    track: ['newhire'],
+    track: ['newhire', 'annual'],
     icon: '📱',
-    title: 'Samsung Galaxy Tab & ConnectTeam',
-    desc: 'Device policy, Knox MDM, ConnectTeam scheduling, and acceptable use.',
+    title: 'Device & Communication Compliance',
+    desc: 'Samsung Galaxy Tab policy, Knox MDM, HIPAA-compliant communication, and ConnectTeam acceptable use.',
+    passScore: 80,
     slides: [
-      { title: 'Your Metro Tablet', content: `<p>Metro issues a Samsung Galaxy Tab managed by Knox MDM (Mobile Device Management). Key things to know:</p><ul><li>The tablet is Metro property — it may be remotely wiped if lost, stolen, or at end of employment</li><li>Knox MDM may restrict installation of non-approved apps</li><li>Do not share your tablet with family members or other clinicians</li><li>Keep the tablet charged and accessible during scheduled work hours</li><li>Return the tablet and all accessories upon separation from Metro</li></ul>` },
-      { title: 'ConnectTeam: Your Scheduling Hub', content: `<p>ConnectTeam is Metro's primary communication and scheduling platform. Use it to:</p><ul><li>View your assigned visits and confirm or flag scheduling conflicts</li><li>Log mileage for each visit (required for reimbursement)</li><li>Complete Metro checklist items and training attestations</li><li>Communicate with Metro admin (not for PHI)</li></ul><div class="callout warn">Do not log patient names, diagnosis codes, or clinical information in ConnectTeam chats or job notes — use the agency EMR for all clinical documentation.</div>` }
+      { title: 'Your Metro-Issued Device', content: `<p>Metro issues a Samsung Galaxy Tab managed by Knox MDM (Mobile Device Management). The device is Metro property and subject to all Metro policies. Key obligations:</p><ul><li>The tablet may be remotely wiped by Metro if lost, stolen, or at separation from Metro — without prior notice</li><li>Knox MDM may restrict or monitor app installation and usage</li><li>Do not share your tablet with family members, household members, or other clinicians</li><li>Keep the tablet charged and accessible during all scheduled work hours</li><li>Return the tablet and all accessories in good condition upon separation from Metro</li><li>Report any damage, malfunction, or loss to Metro immediately</li></ul><div class="callout warn">Using the Metro tablet for personal use — social media, personal email, personal apps, gaming — is a policy violation and may result in disciplinary action.</div>` },
+      { title: 'Knox MDM — What It Means for You', content: `<p>Knox MDM (Mobile Device Management) is Samsung's enterprise security platform. It allows Metro to manage and secure all issued devices remotely.</p><p><strong>What Knox MDM can do:</strong></p><ul><li>Remotely lock or wipe the device if it is lost or stolen</li><li>Restrict installation of unapproved apps</li><li>Enforce screen lock and auto-lock settings</li><li>Monitor device usage for compliance purposes</li><li>Push software updates and security patches</li></ul><p><strong>Your responsibilities:</strong></p><ul><li>Do not attempt to disable, bypass, or remove Knox MDM</li><li>Do not attempt to "root" or modify the operating system</li><li>Do not install apps outside the approved list without authorization from Metro</li><li>Auto-lock must remain enabled — screen locks within 2 minutes of inactivity</li></ul><div class="callout danger">Attempting to disable Knox MDM or bypass device security is a serious policy violation and a potential HIPAA security breach.</div>` },
+      { title: 'HIPAA-Compliant Communication', content: `<p>How you communicate patient information is a HIPAA compliance issue. The device and platform matter — not just the content.</p><p><strong>Never use these for PHI:</strong></p><ul><li>Standard SMS text messaging — not encrypted, not HIPAA compliant</li><li>Personal email (Gmail, Yahoo, iCloud, etc.)</li><li>Personal social media messaging (Facebook Messenger, Instagram DMs, WhatsApp)</li><li>iMessage or Android Messages to non-approved contacts</li><li>ConnectTeam chat or job notes</li></ul><p><strong>Approved for PHI:</strong></p><ul><li>Agency EMR secure messaging (CareFicient, BIOS, HelloNote, PointCare, HCHB)</li><li>Direct phone calls to agency coordinators or treating physicians — do not leave PHI in voicemail</li><li>Agency-approved fax with cover sheet to verified recipient</li></ul><div class="callout danger">Sending PHI via standard text message is a HIPAA violation regardless of intent. When in doubt, use the agency EMR.</div>` },
+      { title: 'ConnectTeam — Acceptable Use', content: `<p>ConnectTeam is Metro's scheduling, communication, and task management platform. It is NOT a clinical documentation system.</p><p><strong>Use ConnectTeam for:</strong></p><ul><li>Viewing your assigned visit schedule</li><li>Logging mileage for each visit (required for reimbursement)</li><li>Confirming or flagging scheduling conflicts</li><li>Completing Metro compliance checklists and training attestations</li><li>Communicating with Metro admin about scheduling and operational matters</li></ul><p><strong>Never use ConnectTeam for:</strong></p><ul><li>Patient names, dates of birth, addresses, or contact information</li><li>Diagnosis codes, clinical findings, or treatment information</li><li>Any information that could identify a patient</li><li>Complaints about patients, families, or agency staff</li></ul><div class="callout warn">ConnectTeam messages are stored and may be reviewed by Metro for compliance purposes. Treat every message as a professional business communication.</div>` },
+      { title: 'Lost or Stolen Device Protocol', content: `<p>A lost or stolen Metro tablet is a potential HIPAA security incident. Time matters — the faster you report, the faster Metro can remotely wipe the device before any PHI is accessed.</p><p><strong>If your tablet is lost or stolen:</strong></p><ol><li>Report to Stephen Mace or Evan Flanagan <strong>immediately — same day, any time</strong></li><li>If stolen: file a police report and provide Metro with the report number</li><li>Metro will initiate a remote Knox MDM wipe of the device</li><li>Metro will conduct a breach assessment to determine if PHI was at risk</li><li>Do not attempt to locate or retrieve the device yourself if it was stolen</li></ol><div class="callout danger">Delaying a lost device report to avoid trouble makes the situation significantly worse. Early reporting protects you, Metro, and your patients. Report immediately.</div>` }
     ],
     quiz: [
-      { q: 'Your Metro tablet is lost during a patient visit. What do you do?', options: ['Report it to Metro within 24 hours', 'Purchase a replacement before reporting', 'Report it to Metro immediately — same day', 'File a police report and then inform Metro within the week'], answer: 2, explanation: 'Lost devices must be reported immediately so Metro can initiate a remote wipe via Knox MDM and assess for potential HIPAA breach.' }
+      { q: 'Your Metro tablet is lost during a patient visit. Your first action is:', options: ['Report it to Metro within 24 hours', 'Purchase a replacement device before reporting', 'Report it to Metro immediately — same day', 'File a police report and inform Metro at your next scheduled check-in'], answer: 2, explanation: 'Report a lost device to Metro immediately so a remote Knox MDM wipe can be initiated before any PHI is accessed. Delays increase breach risk.' },
+      { q: 'A colleague texts you asking for a patient's phone number to confirm a visit tomorrow. You should:', options: ['Text the number — it is just a phone number, not clinical data', 'Call the colleague and give the number verbally', 'Direct the colleague to get contact information through ConnectTeam or the agency scheduler', 'Text the number only if you add a note that it is confidential'], answer: 2, explanation: 'A patient's phone number is PHI. Standard text messaging is not HIPAA compliant. All patient contact information should be obtained through approved channels.' },
+      { q: 'Which of the following is an appropriate use of ConnectTeam?', options: ['Messaging a patient's diagnosis to a covering clinician', 'Logging mileage after completing a visit', 'Documenting wound care findings for the agency chart', 'Sending a patient's address to a colleague covering your schedule'], answer: 1, explanation: 'ConnectTeam is for scheduling, mileage logging, and Metro operational communication only. Patient clinical information and PHI must go through the agency EMR.' },
+      { q: 'Knox MDM on your Metro tablet allows Metro to:', options: ['Read your personal text messages', 'Remotely wipe the device if it is lost or stolen', 'Track your vehicle location during work hours', 'Access your personal email account'], answer: 1, explanation: 'Knox MDM enables remote device management including the ability to wipe a lost or stolen device to protect PHI. It manages the work profile on the device — not personal accounts.' }
     ]
   }
 
@@ -1038,6 +1096,7 @@ const MODULES = [
 // STATE
 // ══════════════════════════════════════════════════════════════
 let currentUser = null;
+let currentUserRole = 'clinician';
 let currentTrack = 'newhire';
 let currentModule = null;
 let currentSlide = 0;
@@ -1047,7 +1106,7 @@ let completions = {};  // { moduleId: { score, signed, completed_at } }
 // ══════════════════════════════════════════════════════════════
 // AUTH
 // ══════════════════════════════════════════════════════════════
-function doLogin() {
+async function doLogin() {
   const name = document.getElementById('nameSelect').value;
   const pin = document.getElementById('pinInput').value;
   const errEl = document.getElementById('loginError');
@@ -1055,9 +1114,15 @@ function doLogin() {
 
   if (!name) { showErr('Please select your name.'); return; }
   if (!pin) { showErr('Please enter your PIN.'); return; }
-  if (PINS[name] !== pin) { showErr('Incorrect PIN. Contact Stephen or Evan if you need help.'); return; }
+
+  const staff = staffList.find(s => s.full_name === name);
+  if (!staff || staff.pin !== pin) {
+    showErr('Incorrect PIN. Contact Stephen or Evan if you need help.');
+    return;
+  }
 
   currentUser = name;
+  currentUserRole = staff.role;
   document.getElementById('userBadge').textContent = name;
   document.getElementById('userBadge').style.display = 'block';
   document.getElementById('logoutBtn').style.display = 'block';
@@ -1094,7 +1159,7 @@ async function loadCompletions() {
     if (data) data.forEach(r => { completions[r.module_id] = r; });
   } catch(e) { console.warn('Supabase not configured yet — running in demo mode.'); }
   renderDash();
-  if (ADMINS.includes(currentUser)) {
+  if (isAdmin(currentUser)) {
     document.getElementById('adminSection').style.display = 'block';
     loadAdminTable();
     loadAdminFilters();
@@ -1277,7 +1342,55 @@ function getSlideText() {
   // Strip HTML tags and clean up whitespace
   const tmp = document.createElement('div');
   tmp.innerHTML = slide.title + '. ' + slide.content;
-  return tmp.textContent.replace(/\s+/g, ' ').trim();
+  let text = tmp.textContent.replace(/\s+/g, ' ').trim();
+
+  // Pronounce acronyms naturally instead of letter-by-letter
+  const acronyms = {
+    'HIPAA': 'HIPPa',
+    'OSHA': 'OH-sha',
+    'PHI': 'P-H-I',
+    'ePHI': 'E-P-H-I',
+    'MRSA': 'MER-sa',
+    'RACE': 'race',
+    'PASS': 'pass',
+    'FAST': 'fast',
+    'TPO': 'T-P-O',
+    'APS': 'A-P-S',
+    'DHS': 'D-H-S',
+    'EMS': 'E-M-S',
+    'PPE': 'P-P-E',
+    'CPR': 'C-P-R',
+    'AED': 'A-E-D',
+    'MDM': 'M-D-M',
+    'SMS': 'S-M-S',
+    'CMS': 'C-M-S',
+    'HHS': 'H-H-S',
+    'OCR': 'O-C-R',
+    'DKA': 'D-K-A',
+    'MDRO': 'M-D-R-O',
+    'SSN': 'S-S-N',
+    'DNR': 'D-N-R',
+    'SOC': 'S-O-C',
+    'OASIS': 'oh-AY-sis',
+    'TB': 'T-B',
+    'MMR': 'M-M-R',
+    'Tdap': 'T-dap',
+    'VRE': 'V-R-E',
+    'PEP': 'P-E-P',
+    'CFR': 'C-F-R',
+    'HAI': 'H-A-I',
+    'HAIs': 'H-A-Is',
+    'EMR': 'E-M-R',
+    'TERO': 'TEER-oh',
+    'PLLC': 'P-L-L-C',
+  };
+
+  for (const [acronym, pronunciation] of Object.entries(acronyms)) {
+    const regex = new RegExp('\\b' + acronym + '\\b', 'g');
+    text = text.replace(regex, pronunciation);
+  }
+
+  return text;
 }
 
 function toggleListen() {
@@ -1359,11 +1472,118 @@ function stopSpeech() {
   clearInterval(progressTimer);
 }
 
+// ══════════════════════════════════════════════════════════════
+// STAFF MANAGEMENT
+// ══════════════════════════════════════════════════════════════
+
+function switchAdminTab(tab) {
+  document.getElementById('adminTabRecords').style.display = tab === 'records' ? 'block' : 'none';
+  document.getElementById('adminTabStaff').style.display = tab === 'staff' ? 'block' : 'none';
+  document.getElementById('tabRecords').classList.toggle('active', tab === 'records');
+  document.getElementById('tabStaff').classList.toggle('active', tab === 'staff');
+  if (tab === 'staff') loadStaffTable();
+}
+
+async function loadStaffTable() {
+  try {
+    const { data } = await sb.from('compliance_staff')
+      .select('*').order('full_name');
+    const tbody = document.getElementById('staffTbody');
+    if (!data || !data.length) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--gray-400);padding:20px;">No staff records found.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = data.map(s => `
+      <tr id="staffrow_${s.id}">
+        <td>${s.full_name}</td>
+        <td><span style="color:${s.role === 'admin' ? 'var(--gold)' : 'var(--teal-light)'};font-weight:600;">${s.role}</span></td>
+        <td><span style="color:${s.active ? '#5de0a0' : '#f08080'};font-weight:700;">${s.active ? '● Active' : '○ Inactive'}</span></td>
+        <td><span style="color:rgba(255,255,255,.3);font-family:monospace;">••••••</span></td>
+        <td style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button onclick="resetPin('${s.id}','${s.full_name.replace(/'/g,"\'")}')" style="padding:4px 10px;font-size:11px;font-weight:600;border-radius:6px;border:1px solid rgba(255,255,255,.2);background:transparent;color:#dde2ea;cursor:pointer;">Reset PIN</button>
+          ${s.active
+            ? `<button onclick="setStaffActive('${s.id}', false)" style="padding:4px 10px;font-size:11px;font-weight:600;border-radius:6px;border:1px solid #f08080;background:transparent;color:#f08080;cursor:pointer;">Deactivate</button>`
+            : `<button onclick="setStaffActive('${s.id}', true)" style="padding:4px 10px;font-size:11px;font-weight:600;border-radius:6px;border:1px solid #5de0a0;background:transparent;color:#5de0a0;cursor:pointer;">Reactivate</button>`
+          }
+          <button onclick="changeRole('${s.id}','${s.role}')" style="padding:4px 10px;font-size:11px;font-weight:600;border-radius:6px;border:1px solid var(--gold);background:transparent;color:var(--gold);cursor:pointer;">${s.role === 'admin' ? '→ Clinician' : '→ Admin'}</button>
+        </td>
+      </tr>`).join('');
+  } catch(e) { console.error('loadStaffTable error:', e); }
+}
+
+function showAddStaff() {
+  document.getElementById('addStaffForm').style.display = 'block';
+  document.getElementById('newStaffName').focus();
+}
+function hideAddStaff() {
+  document.getElementById('addStaffForm').style.display = 'none';
+  document.getElementById('newStaffName').value = '';
+  document.getElementById('newStaffPin').value = '';
+  document.getElementById('addStaffError').style.display = 'none';
+}
+
+async function saveNewStaff() {
+  const name = document.getElementById('newStaffName').value.trim();
+  const pin = document.getElementById('newStaffPin').value.trim();
+  const role = document.getElementById('newStaffRole').value;
+  const errEl = document.getElementById('addStaffError');
+  errEl.style.display = 'none';
+
+  if (!name) { errEl.textContent = 'Name is required.'; errEl.style.display = 'block'; return; }
+  if (!pin || pin.length < 4) { errEl.textContent = 'PIN must be at least 4 characters.'; errEl.style.display = 'block'; return; }
+
+  try {
+    const { error } = await sb.from('compliance_staff').insert({ full_name: name, pin, role, active: true });
+    if (error) throw error;
+    toast(`✓ ${name} added successfully`);
+    hideAddStaff();
+    loadStaffTable();
+    // Refresh the login dropdown
+    await loadStaffList();
+  } catch(e) {
+    errEl.textContent = e.message.includes('unique') ? 'A staff member with that name already exists.' : 'Error saving: ' + e.message;
+    errEl.style.display = 'block';
+  }
+}
+
+async function setStaffActive(id, active) {
+  try {
+    await sb.from('compliance_staff').update({ active, updated_at: new Date().toISOString() }).eq('id', id);
+    toast(active ? '✓ Staff member reactivated' : '✓ Staff member deactivated');
+    loadStaffTable();
+    await loadStaffList();
+  } catch(e) { toast('Error updating staff status'); }
+}
+
+async function resetPin(id, name) {
+  const newPin = prompt(`Set new PIN for ${name}:`);
+  if (!newPin) return;
+  if (newPin.length < 4) { toast('PIN must be at least 4 characters'); return; }
+  try {
+    await sb.from('compliance_staff').update({ pin: newPin, updated_at: new Date().toISOString() }).eq('id', id);
+    toast(`✓ PIN updated for ${name}`);
+  } catch(e) { toast('Error updating PIN'); }
+}
+
+async function changeRole(id, currentRole) {
+  const newRole = currentRole === 'admin' ? 'clinician' : 'admin';
+  try {
+    await sb.from('compliance_staff').update({ role: newRole, updated_at: new Date().toISOString() }).eq('id', id);
+    toast(`✓ Role updated to ${newRole}`);
+    loadStaffTable();
+    await loadStaffList();
+  } catch(e) { toast('Error updating role'); }
+}
+
+// ══════════════════════════════════════════════════════════════
 // Load voices (Chrome requires this trigger)
 if (window.speechSynthesis) {
   window.speechSynthesis.getVoices();
   window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
 }
+
+// Load staff list on page init
+loadStaffList();
 
 function renderQuiz() {
   document.getElementById('slideProgressFill').style.width = '90%';
