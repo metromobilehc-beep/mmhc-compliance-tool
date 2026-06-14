@@ -529,6 +529,7 @@
           <button class="export-btn" onclick="exportCSV()">⬇ Export CSV</button>
           <button class="export-btn" onclick="annualReset()" style="border-color:#f08080;color:#f08080;">🔄 Annual Reset</button>
           <button class="export-btn" onclick="showNotifyPanel()" style="border-color:var(--teal-light);color:var(--teal-light);">📧 Notify Staff</button>
+          <button class="export-btn" onclick="runBackfill()" style="border-color:var(--gold);color:var(--gold);">🔁 Sync Emails</button>
         </div>
 
         <!-- Email Notification Panel -->
@@ -1678,10 +1679,17 @@ async function changeRole(id, currentRole) {
 
 function stripCredentials(fullName) {
   // Remove credential suffix: "Evan Flanagan, PT" -> "Evan Flanagan"
-  return fullName
-    .replace(/,\s*(DPT|PT|PTA|OT|COTA|SLP|NP|RN|LPN|LCSW|MD|DO)\s*$/i, '')
-    .replace(/\s*\(Admin\)\s*$/i, '')
-    .trim();
+  // Split on comma and take only the first part
+  const parts = fullName.split(',');
+  if (parts.length > 1) {
+    const credential = parts[parts.length - 1].trim().toUpperCase();
+    const knownCredentials = ['DPT','PT','PTA','OT','COTA','SLP','NP','RN','LPN','LCSW','MD','DO'];
+    if (knownCredentials.includes(credential)) {
+      return parts.slice(0, parts.length - 1).join(',').trim();
+    }
+  }
+  // Handle "(Admin)" suffix
+  return fullName.replace(' (Admin)', '').trim();
 }
 
 async function editEmail(id, name) {
@@ -1829,6 +1837,12 @@ async function sendReminders() {
   }
 }
 
+async function runBackfill() {
+  toast('Syncing emails to eval tool…');
+  await backfillEmailsToClinicans();
+  toast('✓ All emails synced to eval tool');
+}
+
 async function annualReset() {
   const year = new Date().getFullYear();
   if (!confirm(`Reset ALL annual compliance completions?\n\nThis will clear every employee\'s annual training records so everyone must redo their annual modules. New hire completions are not affected.\n\nThis action cannot be undone. Continue?`)) return;
@@ -1851,6 +1865,19 @@ if (window.speechSynthesis) {
 
 // Load staff list on page init
 loadStaffList();
+
+// One-time backfill: sync any existing compliance emails to clinicians table
+async function backfillEmailsToClinicans() {
+  try {
+    const { data } = await sb.from('compliance_staff').select('full_name, email').not('email', 'is', null);
+    if (!data) return;
+    for (const s of data) {
+      const baseName = stripCredentials(s.full_name);
+      await sb.from('clinicians').update({ email: s.email }).eq('name', baseName);
+    }
+    console.log('Email backfill complete');
+  } catch(e) { console.warn('Backfill error:', e); }
+}
 
 function renderQuiz() {
   document.getElementById('slideProgressFill').style.width = '90%';
