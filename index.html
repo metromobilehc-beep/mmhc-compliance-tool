@@ -534,30 +534,44 @@
 
         <!-- Email Notification Panel -->
         <div id="notifyPanel" style="display:none;background:rgba(255,255,255,.05);border-radius:10px;padding:18px;margin-bottom:18px;">
-          <div style="color:var(--teal-light);font-size:13px;font-weight:700;margin-bottom:12px;">📧 Send Training Reminder</div>
+          <div style="color:var(--teal-light);font-size:13px;font-weight:700;margin-bottom:14px;">📧 Send Training Reminder</div>
+
+          <!-- Row 1: Who to send to -->
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
             <div>
               <label style="color:rgba(255,255,255,.6);font-size:11px;font-weight:600;display:block;margin-bottom:5px;">SEND TO</label>
-              <select id="notifyTarget" class="admin-select" style="width:100%;">
-                <option value="all">All Active Staff</option>
-                <option value="incomplete">Incomplete Only (Annual)</option>
+              <select id="notifyTarget" class="admin-select" style="width:100%;" onchange="onNotifyTargetChange()">
+                <option value="all_with_email">All Staff With Email</option>
+                <option value="newhire_incomplete">New Hire — Not Yet Complete</option>
+                <option value="newhire_complete">New Hire — Already Complete</option>
+                <option value="annual_incomplete">Annual — Not Yet Complete</option>
+                <option value="annual_complete">Annual — Already Complete</option>
                 <option value="individual">Individual Staff Member</option>
               </select>
             </div>
             <div id="notifyIndividualWrap" style="display:none;">
               <label style="color:rgba(255,255,255,.6);font-size:11px;font-weight:600;display:block;margin-bottom:5px;">SELECT STAFF MEMBER</label>
-              <select id="notifyIndividual" class="admin-select" style="width:100%;"></select>
+              <select id="notifyIndividual" class="admin-select" style="width:100%;" onchange="onIndividualChange()"></select>
             </div>
           </div>
+
+          <!-- Row 2: Recipient count indicator -->
+          <div id="notifyCount" style="font-size:12px;color:var(--teal-light);margin-bottom:12px;display:none;">
+            <span id="notifyCountText"></span>
+          </div>
+
+          <!-- Row 3: Custom message -->
           <div style="margin-bottom:12px;">
             <label style="color:rgba(255,255,255,.6);font-size:11px;font-weight:600;display:block;margin-bottom:5px;">CUSTOM MESSAGE (OPTIONAL)</label>
             <textarea id="notifyMessage" placeholder="Add a personal note to the reminder email..." style="width:100%;padding:8px 12px;border-radius:7px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;font-size:13px;resize:vertical;min-height:60px;"></textarea>
           </div>
+
+          <!-- Row 4: Email addresses (editable) -->
           <div style="margin-bottom:12px;">
-            <label style="color:rgba(255,255,255,.6);font-size:11px;font-weight:600;display:block;margin-bottom:5px;">STAFF EMAIL ADDRESSES</label>
-            <textarea id="notifyEmails" placeholder="One email per line or comma separated..." style="width:100%;padding:8px 12px;border-radius:7px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;font-size:13px;resize:vertical;min-height:80px;font-family:monospace;"></textarea>
-            <div style="color:rgba(255,255,255,.4);font-size:11px;margin-top:4px;">Enter the email addresses for staff you want to notify.</div>
+            <label style="color:rgba(255,255,255,.6);font-size:11px;font-weight:600;display:block;margin-bottom:5px;">EMAIL ADDRESSES <span style="font-weight:400;opacity:.6;">(auto-filled based on selection above — edit as needed)</span></label>
+            <textarea id="notifyEmails" placeholder="Select a group above to auto-fill..." style="width:100%;padding:8px 12px;border-radius:7px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;font-size:13px;resize:vertical;min-height:80px;font-family:monospace;"></textarea>
           </div>
+
           <div id="notifyStatus" style="font-size:12px;margin-bottom:10px;display:none;"></div>
           <div style="display:flex;gap:8px;">
             <button onclick="sendReminders()" id="sendBtn" style="padding:8px 20px;background:var(--teal);color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;">Send Reminders</button>
@@ -1726,38 +1740,104 @@ async function deleteStaff(id, name) {
 }
 
 // ── EMAIL NOTIFICATIONS ──────────────────────────────────
-function showNotifyPanel() {
+async function showNotifyPanel() {
   document.getElementById('notifyPanel').style.display = 'block';
+  document.getElementById('notifyStatus').style.display = 'none';
+
   // Populate individual staff dropdown
   const sel = document.getElementById('notifyIndividual');
   sel.innerHTML = '';
-  staffList.forEach(s => {
+  staffList.filter(s => s.email).forEach(s => {
     const o = document.createElement('option');
-    o.value = s.email || '';
-    o.textContent = s.full_name + (s.email ? '' : ' (no email)');
+    o.value = s.email;
+    o.textContent = s.full_name;
     sel.appendChild(o);
   });
-  // Auto-populate all staff emails
-  autoPopulateEmails('all');
-  document.getElementById('notifyTarget').onchange = function() {
-    document.getElementById('notifyIndividualWrap').style.display =
-      this.value === 'individual' ? 'block' : 'none';
-    autoPopulateEmails(this.value);
-  };
+
+  // Load completions for smart targeting
+  await loadCompletionSummary();
+  onNotifyTargetChange();
+}
+
+// Cache of who has completed what
+let completionSummary = { newhire: [], annual: [] };
+
+async function loadCompletionSummary() {
+  try {
+    const modules = MODULES.map(m => m.id);
+    const { data } = await sb.from('compliance_completions')
+      .select('employee_name, track')
+      .in('module_id', modules);
+
+    // Find who has completed ALL modules for each track
+    const newhireModules = MODULES.filter(m => m.track.includes('newhire')).map(m => m.id);
+    const annualModules  = MODULES.filter(m => m.track.includes('annual')).map(m => m.id);
+
+    completionSummary.newhire = staffList.filter(s => {
+      const done = (data||[]).filter(c => c.employee_name === s.full_name && c.track === 'newhire').map(c => c.module_id);
+      return newhireModules.every(id => done.includes(id));
+    }).map(s => s.full_name);
+
+    completionSummary.annual = staffList.filter(s => {
+      const done = (data||[]).filter(c => c.employee_name === s.full_name && c.track === 'annual').map(c => c.module_id);
+      return annualModules.every(id => done.includes(id));
+    }).map(s => s.full_name);
+  } catch(e) {
+    console.warn('Could not load completion summary:', e);
+  }
+}
+
+function onNotifyTargetChange() {
+  const target = document.getElementById('notifyTarget').value;
+  document.getElementById('notifyIndividualWrap').style.display =
+    target === 'individual' ? 'block' : 'none';
+  autoPopulateEmails(target);
+}
+
+function onIndividualChange() {
+  const email = document.getElementById('notifyIndividual').value;
+  document.getElementById('notifyEmails').value = email || '';
+  updateNotifyCount(email ? 1 : 0);
 }
 
 function autoPopulateEmails(target) {
   const emailField = document.getElementById('notifyEmails');
+  let filtered = [];
+
   if (target === 'individual') {
     const sel = document.getElementById('notifyIndividual');
     emailField.value = sel.value || '';
-    sel.onchange = () => { emailField.value = sel.value || ''; };
-  } else {
-    // All staff with emails on file
-    const emails = staffList.filter(s => s.email).map(s => s.email);
-    emailField.value = emails.join('\n');
-    if (!emails.length) emailField.value = '';
+    updateNotifyCount(sel.value ? 1 : 0);
+    return;
   }
+
+  if (target === 'all_with_email') {
+    filtered = staffList.filter(s => s.email);
+  } else if (target === 'newhire_incomplete') {
+    filtered = staffList.filter(s => s.email && !completionSummary.newhire.includes(s.full_name));
+  } else if (target === 'newhire_complete') {
+    filtered = staffList.filter(s => s.email && completionSummary.newhire.includes(s.full_name));
+  } else if (target === 'annual_incomplete') {
+    filtered = staffList.filter(s => s.email && !completionSummary.annual.includes(s.full_name));
+  } else if (target === 'annual_complete') {
+    filtered = staffList.filter(s => s.email && completionSummary.annual.includes(s.full_name));
+  }
+
+  emailField.value = filtered.map(s => s.email).join('\n');
+  updateNotifyCount(filtered.length);
+}
+
+function updateNotifyCount(count) {
+  const el = document.getElementById('notifyCount');
+  const txt = document.getElementById('notifyCountText');
+  if (count === 0) {
+    txt.textContent = '⚠ No matching staff with email addresses found.';
+    el.style.color = '#f08080';
+  } else {
+    txt.textContent = `✓ ${count} staff member${count !== 1 ? 's' : ''} will receive this email.`;
+    el.style.color = 'var(--teal-light)';
+  }
+  el.style.display = 'block';
 }
 
 function hideNotifyPanel() {
