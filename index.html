@@ -771,9 +771,19 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ── EMAILJS CONFIG ──
-const EMAILJS_SERVICE_ID  = 'service_wnhqs7e';
-const EMAILJS_TEMPLATE_ID = 'template_gq1z2x6';
-const EMAILJS_PUBLIC_KEY  = 'kc6pC-rqwD0xph-A0';
+const EMAILJS_SERVICE_ID          = 'service_wnhqs7e';
+const EMAILJS_TEMPLATE_ID         = 'template_gq1z2x6';   // Staff reminder template
+const EMAILJS_DOC_TEMPLATE_ID     = 'template_547iwl7';   // Admin document notification template
+const EMAILJS_PUBLIC_KEY          = 'kc6pC-rqwD0xph-A0';
+
+// ── COMPANY CONFIG ─────────────────────────────────────────
+// White-label: change these values per client deployment
+const COMPANY_CONFIG = {
+  name:               'Metro Mobile Health Care',
+  adminEmails:        ['metromobilehc@gmail.com'],
+  toolUrl:            'https://metromobilehc-beep.github.io/mmhc-compliance-tool',
+  downloadWindowDays: 14,
+};
 
 // Staff loaded dynamically from Supabase compliance_staff table
 let staffList = []; // { full_name, pin, role, active }
@@ -2309,10 +2319,12 @@ async function sendReminders() {
       await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
         to_email: email,
         to_name: name,
-        track: target === 'newhire' ? 'New Hire' : 'Annual Compliance',
-        custom_message: customMsg || 'Please log in and complete your required compliance training modules.',
-        tool_url: 'https://metromobilehc-beep.github.io/mmhc-compliance-tool',
-        from_name: 'Metro Mobile Health Care',
+        subject_line: `Action Required — ${target === 'newhire' ? 'New Hire' : 'Annual'} Compliance Training`,
+        message_body: `${customMsg || 'Please log in and complete your required compliance training modules.'}
+
+Training portal:`,
+        tool_url: COMPANY_CONFIG.toolUrl,
+        company_name: COMPANY_CONFIG.name,
       });
       sent++;
       statusEl.textContent = `Sent ${sent} of ${emails.length}…`;
@@ -2344,10 +2356,12 @@ async function quickSendReminder(name, email) {
     await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
       to_email: email,
       to_name: name,
-      track: 'Annual Compliance',
-      custom_message: 'This is a reminder to complete your required compliance training modules.',
-      tool_url: 'https://metromobilehc-beep.github.io/mmhc-compliance-tool',
-      from_name: 'Metro Mobile Health Care',
+      subject_line: 'Reminder — Complete Your Annual Compliance Training',
+      message_body: `This is a reminder to complete your required annual compliance training modules.
+
+Training portal:`,
+      tool_url: COMPANY_CONFIG.toolUrl,
+      company_name: COMPANY_CONFIG.name,
     });
     toast(`✓ Reminder sent to ${name}`);
   } catch(e) {
@@ -2455,7 +2469,7 @@ async function uploadDocument() {
     if (uploadError) throw uploadError;
 
     // Save record to database
-    const downloadWindowExpires = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString();
+    const downloadWindowExpires = new Date(Date.now() + COMPANY_CONFIG.downloadWindowDays * 24 * 60 * 60 * 1000).toISOString();
     const { error: dbError } = await sb.from('staff_documents').insert({
       employee_name: currentUser,
       document_type: docType,
@@ -2478,6 +2492,16 @@ async function uploadDocument() {
     await loadMyDocs();
     toast('✓ Document uploaded');
 
+    // Notify admins
+    await notifyAdminDocUpload({
+      employee_name: currentUser,
+      doc_type: docType,
+      exp_date: expDate || 'Not specified',
+      upload_date: new Date().toLocaleDateString(),
+      notes: notes || 'None',
+      file_name: file.name,
+    });
+
   } catch(e) {
     console.error('Upload error:', e);
     showUploadStatus('Upload failed: ' + e.message, 'error');
@@ -2492,6 +2516,32 @@ function showUploadStatus(msg, type) {
   el.style.display = 'block';
   el.style.color = type === 'error' ? 'var(--danger)' : 'var(--success)';
   el.textContent = msg;
+}
+
+async function notifyAdminDocUpload(params) {
+  try {
+    emailjs.init(EMAILJS_PUBLIC_KEY);
+    // Send to each admin email
+    for (const email of COMPANY_CONFIG.adminEmails) {
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_DOC_TEMPLATE_ID, {
+        to_email:      email,
+        to_name:       'Admin',
+        employee_name: params.employee_name,
+        doc_type:      params.doc_type,
+        exp_date:      params.exp_date,
+        upload_date:   params.upload_date,
+        notes:         params.notes,
+        file_name:     params.file_name,
+        tool_url:      COMPANY_CONFIG.toolUrl,
+        company_name:  COMPANY_CONFIG.name,
+        download_days: COMPANY_CONFIG.downloadWindowDays,
+      });
+    }
+    console.log('Admin notification sent');
+  } catch(e) {
+    console.warn('Admin notification failed:', e.message);
+    // Don't show error to user — upload succeeded, notification is secondary
+  }
 }
 
 async function loadMyDocs() {
